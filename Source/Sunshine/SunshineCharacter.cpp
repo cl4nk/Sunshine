@@ -17,9 +17,7 @@ ASunshineCharacter::ASunshineCharacter()
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
-	// set our turn rates for input
-	BaseTurnRate = 45.f;
-	BaseLookUpRate = 45.f;
+	CurrentMana = MaxMana;
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
@@ -102,6 +100,56 @@ void ASunshineCharacter::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+}
+
+void ASunshineCharacter::Crouch()
+{
+	IsCrouching = true;
+}
+
+void ASunshineCharacter::StopCrouch()
+{
+	IsCrouching = false;
+}
+
+void ASunshineCharacter::Run()
+{
+	IsRunning = true;
+}
+
+void ASunshineCharacter::StopRun()
+{
+	IsRunning = false;
+}
+
+void ASunshineCharacter::Fall()
+{
+}
+
+void ASunshineCharacter::SkillSelection(float Value)
+{
+}
+
+void ASunshineCharacter::DistanceWeaponPressed()
+{
+	IsFocusing = true;
+}
+
+void ASunshineCharacter::DistanceWeaponReleased()
+{
+	IsFocusing = false;
+}
+
+void ASunshineCharacter::LaunchDistanceWeapon()
+{
+}
+
+void ASunshineCharacter::FirstSkill()
+{
+}
+
+void ASunshineCharacter::SecondSkill()
+{
 }
 
 void ASunshineCharacter::MoveForward(float Value)
