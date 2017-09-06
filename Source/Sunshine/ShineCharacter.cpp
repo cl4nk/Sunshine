@@ -2,6 +2,10 @@
 
 #include "ShineCharacter.h"
 
+void AShineCharacter::SkillOne()
+{
+}
 
-
-
+void AShineCharacter::SkillTwo()
+{
+}

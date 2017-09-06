@@ -13,8 +13,11 @@ UCLASS()
 class SUNSHINE_API ASunCharacter : public ASunshineCharacter
 {
 	GENERATED_BODY()
-	
-	
-	
-	
+
+public:
+	virtual ~ASunCharacter() = default;
+
+private:
+	void SkillOne() override;
+	void SkillTwo() override;
 };

@@ -2,6 +2,10 @@
 
 #include "SunCharacter.h"
 
+void ASunCharacter::SkillOne()
+{
+}
 
-
-
+void ASunCharacter::SkillTwo()
+{
+}
