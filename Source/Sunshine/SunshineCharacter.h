@@ -7,6 +7,7 @@
 #include "SunshineCharacter.generated.h"
 
 UCLASS(config=Game)
+
 class ASunshineCharacter : public ACharacter
 {
 	GENERATED_BODY()
@@ -18,6 +19,7 @@ class ASunshineCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
 public:
 	ASunshineCharacter();
 
@@ -29,60 +31,31 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate = 45.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stats)
-	int MaxMana = 5;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stats)
-	float WalkSpeed = 20.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stats)
-	float RunSpeed = 20.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Noise)
-	float WalkNoise = 1.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Noise)
-	float RunNoise = 2.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Noise)
-	float CrouchNoise = 0.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Noise)
-	float JumpNoise = 2.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Noise)
-	float ClimbNoise = 0.5f;
-
 protected:
-
-	int CurrentMana = 0;
-
 	bool IsRunning = false;
 
 	bool IsCrouching = false;
-
-	bool IsFocusing = false;
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
 
 	/** Called for forwards/backward input */
-	void MoveForward(float Value);
+	void MoveForward( float Value );
 
 	/** Called for side to side input */
-	void MoveRight(float Value);
+	void MoveRight( float Value );
 
 	/** 
 	 * Called via input to turn at a given rate. 
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	 */
-	void TurnAtRate(float Rate);
+	void TurnAtRate( float Rate );
 
 	/**
 	 * Called via input to turn look up/down at a given rate. 
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	 */
-	void LookUpAtRate(float Rate);
+	void LookUpAtRate( float Rate );
 
 	void Crouch();
 
@@ -94,28 +67,135 @@ protected:
 
 	void Fall();
 
-	void SkillSelection(float Value);
-
-	void DistanceWeaponPressed();
-
-	void DistanceWeaponReleased();
-
-	virtual void LaunchDistanceWeapon();
-
-	virtual void FirstSkill();
-
-	virtual void SecondSkill();
-
 	/** Handler for when a touch input begins. */
-	void TouchStarted(ETouchIndex::Type FingerIndex, FVector Location);
+	void TouchStarted( ETouchIndex::Type FingerIndex, FVector Location );
 
 	/** Handler for when a touch input stops. */
-	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
+	void TouchStopped( ETouchIndex::Type FingerIndex, FVector Location );
 
 protected:
 	// APawn interface
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void SetupPlayerInputComponent( class UInputComponent* PlayerInputComponent ) override;
 	// End of APawn interface
+
+#pragma region Sun&Shine common Stats
+protected:
+	// TODO: Every Stat should be changed to "EditDefaultsOnly" after debug
+	/**
+	 * \brief Maximum mana of the Character
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Mana")
+	int m_maxMana = 0;
+
+	/**
+	 * \brief Current mana of the Character
+	 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats|Mana")
+	int m_currentMana = 0;
+
+	#pragma region Walk
+	/**
+	 * \brief Walk speed of the Character
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Walk")
+	float m_walkSpeed = 10.0f;
+
+	/**
+	 * \brief Noise produced by the Character when walking
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Walk")
+	float m_walkNoise = 1.f;
+	#pragma endregion
+
+	#pragma region Run
+	/**
+	 * \brief Run speed of the Character
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Run")
+	float m_runSpeed = 20.0f;
+
+	/**
+	 * \brief Noise produced by the Character when running
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Run")
+	float m_runNoise = 2.f;
+	#pragma endregion
+
+	#pragma region Crouch
+	/**
+	 * \brief Crouch speed of the Character
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Crouch")
+	float m_crouchSpeed = 5.0f;
+
+	/**
+	 * \brief Noise produced by the Character when crouching
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Crouch")
+	float m_crouchNoise = 0.f;
+	#pragma endregion
+
+	#pragma region Climb
+	/**
+	 * \brief Climb speed of the Character
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Climb")
+	float m_climbSpeed = 10.0f;
+
+	/**
+	 * \brief Noise produced by the Character when climbing
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Climb")
+	float m_climbNoise = 0.5f;
+	#pragma endregion
+
+	/**
+	 * \brief Noise produced by the Character when jumping
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Jump")
+	float m_jumpNoise = 2.f;
+
+	// TODO: projectile to be set
+	// UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+	// Projectile* m_weapon = nullptr;
+
+private:
+	/**
+	 * \brief Tells wether the character is focusing with his range weapon or not
+	 */
+	bool m_bIsFocusing = false;
+#pragma endregion
+
+#pragma region Sun&Shine common Functions
+protected:
+	/**
+	 * \brief Execute skill one
+	 */
+	virtual void SkillOne();
+
+	/**
+	 * \brief Execute skill two
+	 */
+	virtual void SkillTwo();
+
+private:
+	/**
+	 * \brief Called when RangeWeapon key is pressed
+	 */
+	void RangeWeaponPressed();
+
+	/**
+	 * \brief Called when RangeWeapon key is released
+	 */
+	void RangeWeaponReleased();
+
+	/**
+	 * \brief Execute Ranged Weapon
+	 * \note Is private because the way Shine and Sun uses their ranged weapon is the same
+	 *		 Only the type of weapon will change, and change the effect
+	 */
+	void RangeWeapon();
+#pragma endregion
 
 public:
 	/** Returns CameraBoom subobject **/
@@ -123,4 +203,3 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 };
-

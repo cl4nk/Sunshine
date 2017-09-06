@@ -17,7 +17,7 @@ ASunshineCharacter::ASunshineCharacter()
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
-	CurrentMana = MaxMana;
+	m_currentMana = m_maxMana;
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
@@ -82,12 +82,12 @@ void ASunshineCharacter::OnResetVR()
 
 void ASunshineCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
 {
-		Jump();
+	Jump();
 }
 
 void ASunshineCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
 {
-		StopJumping();
+	StopJumping();
 }
 
 void ASunshineCharacter::TurnAtRate(float Rate)
@@ -126,32 +126,6 @@ void ASunshineCharacter::Fall()
 {
 }
 
-void ASunshineCharacter::SkillSelection(float Value)
-{
-}
-
-void ASunshineCharacter::DistanceWeaponPressed()
-{
-	IsFocusing = true;
-}
-
-void ASunshineCharacter::DistanceWeaponReleased()
-{
-	IsFocusing = false;
-}
-
-void ASunshineCharacter::LaunchDistanceWeapon()
-{
-}
-
-void ASunshineCharacter::FirstSkill()
-{
-}
-
-void ASunshineCharacter::SecondSkill()
-{
-}
-
 void ASunshineCharacter::MoveForward(float Value)
 {
 	if ((Controller != NULL) && (Value != 0.0f))
@@ -180,3 +154,27 @@ void ASunshineCharacter::MoveRight(float Value)
 		AddMovementInput(Direction, Value);
 	}
 }
+
+#pragma region Sun&Shine common Functions
+void ASunshineCharacter::RangeWeaponPressed()
+{
+	m_bIsFocusing = true;
+}
+
+void ASunshineCharacter::RangeWeaponReleased()
+{
+	m_bIsFocusing = false;
+}
+
+void ASunshineCharacter::RangeWeapon()
+{
+}
+
+void ASunshineCharacter::SkillOne()
+{
+}
+
+void ASunshineCharacter::SkillTwo()
+{
+}
+#pragma endregion
