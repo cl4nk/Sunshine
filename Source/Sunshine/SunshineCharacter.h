@@ -81,6 +81,7 @@ protected:
 #pragma region Sun&Shine common Stats
 protected:
 	// TODO: Every Stat should be changed to "EditDefaultsOnly" after debug
+	#pragma region Mana
 	/**
 	 * \brief Maximum mana of the Character
 	 */
@@ -92,6 +93,7 @@ protected:
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats|Mana")
 	int m_currentMana = 0;
+	#pragma endregion
 
 	#pragma region Walk
 	/**
@@ -170,11 +172,13 @@ private:
 protected:
 	/**
 	 * \brief Execute skill one
+	 * \note Effect may differ depending on how and where the skilled is used
 	 */
 	virtual void SkillOne();
 
 	/**
 	 * \brief Execute skill two
+	 * \note Effect may differ depending on how and where the skilled is used
 	 */
 	virtual void SkillTwo();
 
@@ -195,6 +199,16 @@ private:
 	 *		 Only the type of weapon will change, and change the effect
 	 */
 	void RangeWeapon();
+
+	/**
+	 * \brief Called when taking cover
+	 */
+	void TakeCover();
+
+	/**
+	 * \brief Called when leaving cover
+	 */
+	void LeaveCover();
 #pragma endregion
 
 public:

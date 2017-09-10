@@ -170,6 +170,14 @@ void ASunshineCharacter::RangeWeapon()
 {
 }
 
+void ASunshineCharacter::TakeCover()
+{
+}
+
+void ASunshineCharacter::LeaveCover()
+{
+}
+
 void ASunshineCharacter::SkillOne()
 {
 }
