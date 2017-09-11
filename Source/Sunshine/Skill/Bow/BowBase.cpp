@@ -1,28 +1,28 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "SkillArrowPlague.h"
+#include "BowBase.h"
 
 #pragma region Unreal Engine functions
-void ASkillArrowPlague::BeginPlay()
+void ABowBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	m_manaCost = 3;
+	m_manaCost = 2;
 	m_noiseValue = 1.0f;
 }
 
-void ASkillArrowPlague::Tick( float deltaTime )
+void ABowBase::Tick( float deltaTime )
 {
 	Super::Tick( deltaTime );
 }
 #pragma endregion
 
 #pragma region Events
-void ASkillArrowPlague::OnActivationStart_Implementation()
+void ABowBase::OnActivationStart_Implementation()
 {
 }
 
-void ASkillArrowPlague::OnActivationEnd_Implementation()
+void ABowBase::OnActivationEnd_Implementation()
 {
 }
 #pragma endregion

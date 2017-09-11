@@ -3,19 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Skill/Arrow/SkillArrowBase.h"
-#include "SkillArrowLight.generated.h"
+#include "Skill/Bow/BowBase.h"
+#include "BowStandard.generated.h"
 
 /**
- * Shoots an arrow of light that notifies enemies permits teleport
+ * Shoots a standard arrow which can kill animals or alert enemies
  */
 UCLASS()
-class SUNSHINE_API ASkillArrowLight : public ASkillArrowBase
+class SUNSHINE_API ABowStandard : public ABowBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual ~ASkillArrowLight() = default;
+	virtual ~ABowStandard() = default;
 
 #pragma region Unreal Engine functions
 protected:

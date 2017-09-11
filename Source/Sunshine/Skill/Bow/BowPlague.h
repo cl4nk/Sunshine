@@ -3,19 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Skill/Arrow/SkillArrowBase.h"
-#include "SkillArrowPlague.generated.h"
+#include "Skill/Bow/BowBase.h"
+#include "BowPlague.generated.h"
 
 /**
  * Shoots an arrow full of plague to kill an enemy
  */
 UCLASS()
-class SUNSHINE_API ASkillArrowPlague : public ASkillArrowBase
+class SUNSHINE_API ABowPlague : public ABowBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual ~ASkillArrowPlague() = default;
+	virtual ~ABowPlague() = default;
 
 #pragma region Unreal Engine functions
 protected:

@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "SkillArrowStandard.h"
+#include "BowStandard.h"
 
 #pragma region Unreal Engine functions
-void ASkillArrowStandard::BeginPlay()
+void ABowStandard::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -12,18 +12,18 @@ void ASkillArrowStandard::BeginPlay()
 	m_noiseValue = 0.0f;
 }
 
-void ASkillArrowStandard::Tick( float deltaTime )
+void ABowStandard::Tick( float deltaTime )
 {
 	Super::Tick( deltaTime );
 }
 #pragma endregion
 
 #pragma region Events
-void ASkillArrowStandard::OnActivationStart_Implementation()
+void ABowStandard::OnActivationStart_Implementation()
 {
 }
 
-void ASkillArrowStandard::OnActivationEnd_Implementation()
+void ABowStandard::OnActivationEnd_Implementation()
 {
 }
 #pragma endregion

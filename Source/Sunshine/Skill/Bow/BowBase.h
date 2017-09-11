@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Skill/SkillBase.h"
-#include "SkillArrowBase.generated.h"
+#include "BowBase.generated.h"
 
 /**
  * Base class for every Arrow
  */
 UCLASS()
-class SUNSHINE_API ASkillArrowBase : public ASkillBase
+class SUNSHINE_API ABowBase : public ASkillBase
 {
 	GENERATED_BODY()
 
 public:
-	virtual ~ASkillArrowBase() = default;
+	virtual ~ABowBase() = default;
 
 #pragma region Unreal Engine functions
 protected:
