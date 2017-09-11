@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Projectile/Arrow/ArrowBase.h"
-#include "ArrowPlague.generated.h"
+#include "ArrowLight.generated.h"
 
 /**
- * Plague arrow capable of killing an enemy
+ * Light arrow capable of creating light zones that Sun can use to teleport
  */
 UCLASS()
-class SUNSHINE_API UArrowPlague : public UArrowBase
+class SUNSHINE_API UArrowLight : public UArrowBase
 {
 	GENERATED_BODY()
 
@@ -23,5 +23,5 @@ protected:
 	/**
 	 * \brief Function called when overlap with another object ends
 	 */
-	void OnOverlapEnd( UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult ) override;
+	void OnOverlapEnd( UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult ) override;	
 };

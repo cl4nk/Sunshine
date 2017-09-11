@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Projectile/Arrow/ArrowBase.h"
-#include "ArrowPlague.generated.h"
+#include "ArrowStandard.generated.h"
 
 /**
- * Plague arrow capable of killing an enemy
+ * Standard arrow that can kill or alert animals or alert enemies
  */
 UCLASS()
-class SUNSHINE_API UArrowPlague : public UArrowBase
+class SUNSHINE_API UArrowStandard : public UArrowBase
 {
 	GENERATED_BODY()
 
