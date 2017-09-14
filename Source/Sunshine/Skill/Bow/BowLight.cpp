@@ -8,7 +8,8 @@ void ABowLight::BeginPlay()
 	Super::BeginPlay();
 
 	m_manaCost = 2;
-	m_noiseValue = 1.0f;
+	// Noise is made by the arrow not the bow
+	m_noiseValue = 0.0f;
 }
 
 void ABowLight::Tick( float deltaTime )

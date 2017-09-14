@@ -7,8 +7,8 @@ void ABowBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	m_manaCost = 2;
-	m_noiseValue = 1.0f;
+	m_manaCost = 0;
+	m_noiseValue = 0.0f;
 }
 
 void ABowBase::Tick( float deltaTime )
