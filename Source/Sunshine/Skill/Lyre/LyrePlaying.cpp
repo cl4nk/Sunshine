@@ -26,4 +26,9 @@ void ALyrePlaying::OnActivationStart_Implementation()
 void ALyrePlaying::OnActivationEnd_Implementation()
 {
 }
+
+void ALyrePlaying::OnFailedPlaying_Implementation()
+{
+	// Do something
+}
 #pragma endregion
