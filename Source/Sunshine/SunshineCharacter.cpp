@@ -17,8 +17,6 @@ ASunshineCharacter::ASunshineCharacter()
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
-	m_currentMana = m_maxMana;
-
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -43,6 +41,46 @@ ASunshineCharacter::ASunshineCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+}
+
+void ASunshineCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	m_currentMana = m_maxMana;
+
+	TSubclassOf<ASkillBase> skillOne = m_defaultSkillOne;
+	if ( skillOne == nullptr )
+	{
+		UE_LOG( LogTemp, Error, TEXT( "DefaultSkillOne is either null or not valid !" ) );
+	}
+	else
+	{
+		m_skillOne = skillOne.GetDefaultObject();
+		m_skillOne->Init( this );
+	}
+
+	TSubclassOf<ASkillBase> skillTwo = m_defaultSkillTwo;
+	if ( skillTwo == nullptr )
+	{
+		UE_LOG( LogTemp, Error, TEXT( "DefaultSkillTwo is either null or not valid !" ) );
+	}
+	else
+	{
+		m_skillTwo = skillTwo.GetDefaultObject();
+		m_skillTwo->Init( this );
+	}
+
+	TSubclassOf<ASkillBase> skillUltimate = m_defaultSkillUltimate;
+	if ( skillUltimate == nullptr )
+	{
+		UE_LOG( LogTemp, Error, TEXT( "DefaultSkillUltimate is either null or not valid !" ) );
+	}
+	else
+	{	
+		m_skillUltimate = skillUltimate.GetDefaultObject();
+		m_skillUltimate->Init( this );
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -72,8 +110,34 @@ void ASunshineCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ASunshineCharacter::OnResetVR);
+
+	// Skills
+	PlayerInputComponent->BindAction("SkillOne", IE_Pressed, this, &ASunshineCharacter::SkillOnePressed);
+	PlayerInputComponent->BindAction("SkillOne", IE_Released, this, &ASunshineCharacter::SkillOneReleased);
+	PlayerInputComponent->BindAction("SkillTwo", IE_Pressed, this, &ASunshineCharacter::SkillTwoPressed);
+	PlayerInputComponent->BindAction("SkillTwo", IE_Released, this, &ASunshineCharacter::SkillTwoReleased);
+	PlayerInputComponent->BindAction("SkillUltimate", IE_Pressed, this, &ASunshineCharacter::SkillUltimatePressed);
+	PlayerInputComponent->BindAction("SkillUltimate", IE_Released, this, &ASunshineCharacter::SkillUltimateReleased);
 }
 
+bool ASunshineCharacter::IsHidden() const
+{
+	return m_hidingBushNum > 0;
+}
+
+void ASunshineCharacter::BeginHiding()
+{
+	++m_hidingBushNum;
+
+	UE_LOG( LogTemp, Warning, TEXT( "BeginHiding() - %d" ), m_hidingBushNum );
+}
+
+void ASunshineCharacter::EndHiding()
+{
+	--m_hidingBushNum;
+
+	UE_LOG( LogTemp, Warning, TEXT( "EndHiding() - %d" ), m_hidingBushNum );
+}
 
 void ASunshineCharacter::OnResetVR()
 {

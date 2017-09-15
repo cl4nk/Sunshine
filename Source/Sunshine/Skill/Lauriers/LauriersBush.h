@@ -25,8 +25,14 @@ public:
 	virtual void Tick( float deltaTime ) override;
 #pragma endregion
 
+	void Init( ASunshineCharacter* character ) override;
+
+protected:
 #pragma region Events
 	virtual void OnActivationStart_Implementation() override;
 	virtual void OnActivationEnd_Implementation() override;
 #pragma endregion
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	UClass *m_bushClass = nullptr;
 };

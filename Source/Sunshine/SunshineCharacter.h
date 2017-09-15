@@ -32,6 +32,8 @@ public:
 	float BaseLookUpRate = 45.f;
 
 protected:
+	virtual void BeginPlay() override;
+
 	bool IsRunning = false;
 
 	bool IsCrouching = false;
@@ -78,24 +80,40 @@ protected:
 	virtual void SetupPlayerInputComponent( class UInputComponent* PlayerInputComponent ) override;
 	// End of APawn interface
 
+public:
+	UFUNCTION( BlueprintCallable )
+	bool IsHidden() const;
+
+	UFUNCTION( BlueprintCallable )
+	void BeginHiding();
+
+	UFUNCTION( BlueprintCallable )
+	void EndHiding();
+
+private:
+	/**
+	 * \brief Tells wether the character is hidden 
+	 */
+	uint16_t m_hidingBushNum = 0;
+
 #pragma region Sun&Shine common Stats
 protected:
 	// TODO: Every Stat should be changed to "EditDefaultsOnly" after debug
-	#pragma region Mana
+#pragma region Mana
 	/**
 	 * \brief Maximum mana of the Character
 	 */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Mana")
-	int m_maxMana = 0;
+	int m_maxMana = 10;
 
 	/**
 	 * \brief Current mana of the Character
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats|Mana")
 	int m_currentMana = 0;
-	#pragma endregion
+#pragma endregion
 
-	#pragma region Walk
+#pragma region Walk
 	/**
 	 * \brief Walk speed of the Character
 	 */
@@ -107,9 +125,9 @@ protected:
 	 */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Walk")
 	float m_walkNoise = 1.f;
-	#pragma endregion
+#pragma endregion
 
-	#pragma region Run
+#pragma region Run
 	/**
 	 * \brief Run speed of the Character
 	 */
@@ -121,9 +139,9 @@ protected:
 	 */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Run")
 	float m_runNoise = 2.f;
-	#pragma endregion
+#pragma endregion
 
-	#pragma region Crouch
+#pragma region Crouch
 	/**
 	 * \brief Crouch speed of the Character
 	 */
@@ -135,9 +153,9 @@ protected:
 	 */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Crouch")
 	float m_crouchNoise = 0.f;
-	#pragma endregion
+#pragma endregion
 
-	#pragma region Climb
+#pragma region Climb
 	/**
 	 * \brief Climb speed of the Character
 	 */
@@ -149,7 +167,7 @@ protected:
 	 */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Climb")
 	float m_climbNoise = 0.5f;
-	#pragma endregion
+#pragma endregion
 
 	/**
 	 * \brief Noise produced by the Character when jumping
