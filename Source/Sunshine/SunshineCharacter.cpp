@@ -128,15 +128,11 @@ bool ASunshineCharacter::IsHidden() const
 void ASunshineCharacter::BeginHiding()
 {
 	++m_hidingBushNum;
-
-	UE_LOG( LogTemp, Warning, TEXT( "BeginHiding() - %d" ), m_hidingBushNum );
 }
 
 void ASunshineCharacter::EndHiding()
 {
 	--m_hidingBushNum;
-
-	UE_LOG( LogTemp, Warning, TEXT( "EndHiding() - %d" ), m_hidingBushNum );
 }
 
 void ASunshineCharacter::OnResetVR()
@@ -244,12 +240,8 @@ void ASunshineCharacter::LeaveCover()
 
 void ASunshineCharacter::SkillOnePressed()
 {
-	UE_LOG( LogTemp, Warning, TEXT("SkillOnePressed 1") )
-
 	if ( m_skillOne == nullptr )
 		return;
-
-	UE_LOG( LogTemp, Warning, TEXT("SkillOnePressed 2") )
 
 	StartSkill( m_skillOne );
 }
