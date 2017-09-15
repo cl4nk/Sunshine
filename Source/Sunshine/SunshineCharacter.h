@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Skill/SkillBase.h"
 #include "SunshineCharacter.generated.h"
 
 UCLASS(config=Game)
-
 class ASunshineCharacter : public ACharacter
 {
 	GENERATED_BODY()
@@ -21,7 +21,7 @@ class ASunshineCharacter : public ACharacter
 	class UCameraComponent* FollowCamera;
 
 public:
-	ASunshineCharacter();
+	ASunshineCharacter();	
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Camera)
@@ -170,17 +170,89 @@ private:
 
 #pragma region Sun&Shine common Functions
 protected:
-	/**
-	 * \brief Execute skill one
-	 * \note Effect may differ depending on how and where the skilled is used
-	 */
-	virtual void SkillOne();
+#pragma region Skills
+
+	#pragma region Skill One
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "skills")
+	UClass*	m_defaultSkillOne = nullptr;
 
 	/**
-	 * \brief Execute skill two
-	 * \note Effect may differ depending on how and where the skilled is used
+	 * \brief First skill of the character
 	 */
-	virtual void SkillTwo();
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Skills")
+	ASkillBase* m_skillOne = nullptr;
+
+	/**
+	 * \brief Try to execute skill one
+	 */
+	void SkillOnePressed();
+
+	/**
+	 * \brief Try to end skill one execution
+	 */
+	void SkillOneReleased();
+	#pragma endregion
+
+	#pragma region Skill Two
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Skills")
+	UClass*	m_defaultSkillTwo = nullptr;
+
+	/**
+	 * \brief Second skill of the character
+	 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Skills")
+	ASkillBase* m_skillTwo = nullptr;
+
+	/**
+	 * \brief Try to execute skill two
+	 */
+	void SkillTwoPressed();
+
+	/**
+	 * \brief Try to end skill one execution
+	 */
+	void SkillTwoReleased();
+	#pragma endregion
+
+	#pragma region Skill Ultimate
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Skills")
+	UClass*	m_defaultSkillUltimate = nullptr;
+
+	/**
+	 * \brief Ultimate skill of the character
+	 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Skills")
+	ASkillBase* m_skillUltimate = nullptr;
+
+	/**
+	 * \brief Try to execute ultimate skill
+	 */
+	void SkillUltimatePressed();
+
+	/**
+	 * \brief Try to end skill one execution
+	 */
+	void SkillUltimateReleased();
+	#pragma endregion
+
+	/**
+	 * \brief Is a skill being used or not
+	 */
+	bool m_bIsUsingSkill = false;
+
+	/**
+	 * \brief Starts the skill
+	 * \param skill _IN_ The skill to call Start() on
+	 */
+	void StartSkill( ASkillBase* skill );
+
+	/**
+	 * \brief Finishes the skill
+	 * \param skill _IN_ The skill to call Finish() on
+	 */
+	void FinishSkill( ASkillBase* skill );
+
+#pragma endregion
 
 private:
 	/**

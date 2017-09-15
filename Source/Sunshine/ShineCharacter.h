@@ -16,8 +16,4 @@ class SUNSHINE_API AShineCharacter : public ASunshineCharacter
 
 public:
 	virtual ~AShineCharacter() = default;
-
-private:
-	void SkillOne() override;
-	void SkillTwo() override;
 };

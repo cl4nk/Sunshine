@@ -178,11 +178,70 @@ void ASunshineCharacter::LeaveCover()
 {
 }
 
-void ASunshineCharacter::SkillOne()
+void ASunshineCharacter::SkillOnePressed()
 {
+	UE_LOG( LogTemp, Warning, TEXT("SkillOnePressed 1") )
+
+	if ( m_skillOne == nullptr )
+		return;
+
+	UE_LOG( LogTemp, Warning, TEXT("SkillOnePressed 2") )
+
+	StartSkill( m_skillOne );
 }
 
-void ASunshineCharacter::SkillTwo()
+void ASunshineCharacter::SkillOneReleased()
 {
+	if ( m_skillOne == nullptr )
+		return;
+
+	FinishSkill( m_skillOne );
+}
+
+void ASunshineCharacter::SkillTwoPressed()
+{
+	if ( m_skillTwo == nullptr )
+		return;
+
+	StartSkill( m_skillTwo );
+}
+
+void ASunshineCharacter::SkillTwoReleased()
+{
+	if ( m_skillTwo == nullptr )
+		return;
+
+	FinishSkill( m_skillTwo );
+}
+
+void ASunshineCharacter::SkillUltimatePressed()
+{
+	if ( m_skillUltimate == nullptr )
+		return;
+
+	StartSkill( m_skillUltimate );
+}
+
+void ASunshineCharacter::SkillUltimateReleased()
+{
+	if ( m_skillUltimate == nullptr )
+		return;
+
+	FinishSkill( m_skillUltimate );
+}
+
+void ASunshineCharacter::StartSkill( ASkillBase* skill )
+{
+	if ( m_bIsUsingSkill )
+		return;
+
+	skill->Start();
+}
+
+void ASunshineCharacter::FinishSkill( ASkillBase* skill )
+{
+	skill->Finish();
+
+	m_bIsUsingSkill = false;
 }
 #pragma endregion

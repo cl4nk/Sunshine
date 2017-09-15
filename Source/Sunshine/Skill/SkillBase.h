@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "SkillBase.generated.h"
 
+class ASunshineCharacter;
+
 UCLASS()
 class SUNSHINE_API ASkillBase : public AActor
 {
@@ -26,22 +28,7 @@ public:
 	virtual void Tick( float deltaTime ) override;
 #pragma endregion
 
-#pragma region Events
-	/**
-	 * \brief Called when the skill starts
-	 */
-	UFUNCTION(BlueprintNativeEvent, Category = "Events")
-	void OnActivationStart();
-	virtual void OnActivationStart_Implementation();
-
-	/**
-	 * \brief Called when skill ends
-	 */
-	UFUNCTION(BlueprintNativeEvent, Category = "Events")
-	void OnActivationEnd();
-	virtual void OnActivationEnd_Implementation();
-#pragma endregion
-
+public:
 #pragma region Getters
 	/**
 	 * \brief Get the Mana cost of the Skill
@@ -54,7 +41,29 @@ public:
 	float GetNoiseValue() const;
 #pragma endregion
 
+	virtual void Init( ASunshineCharacter* owner );
+	void Start();
+	void Finish();
+
 protected:
 	uint32_t m_manaCost = 0;
 	float m_noiseValue = 0.0f;
+	bool m_bIsActive = false;
+	ASunshineCharacter* m_owner = nullptr;
+
+#pragma region Events
+	/**
+	 * \brief Called when the skill activation starts, when key is pressed
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category = "Events")
+	void OnActivationStart();
+	virtual void OnActivationStart_Implementation();
+
+	/**
+	 * \brief Called when skill activation ends, when key is released
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category = "Events")
+	void OnActivationEnd();
+	virtual void OnActivationEnd_Implementation();
+#pragma endregion
 };
