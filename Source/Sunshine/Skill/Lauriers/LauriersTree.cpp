@@ -20,9 +20,15 @@ void ALauriersTree::Tick( float deltaTime )
 #pragma region Events
 void ALauriersTree::OnActivationStart_Implementation()
 {
+	Super::OnActivationStart_Implementation();
+
+	// Do something
 }
 
 void ALauriersTree::OnActivationEnd_Implementation()
 {
+	// Do something
+
+	Super::OnActivationEnd_Implementation();
 }
 #pragma endregion

@@ -21,9 +21,15 @@ void ABowPlague::Tick( float deltaTime )
 #pragma region Events
 void ABowPlague::OnActivationStart_Implementation()
 {
+	Super::OnActivationStart_Implementation();
+
+	// Do something
 }
 
 void ABowPlague::OnActivationEnd_Implementation()
 {
+	// Do something
+
+	Super::OnActivationEnd_Implementation();
 }
 #pragma endregion

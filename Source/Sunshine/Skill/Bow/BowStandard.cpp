@@ -21,9 +21,15 @@ void ABowStandard::Tick( float deltaTime )
 #pragma region Events
 void ABowStandard::OnActivationStart_Implementation()
 {
+	Super::OnActivationStart_Implementation();
+
+	// Do something
 }
 
 void ABowStandard::OnActivationEnd_Implementation()
 {
+	// Do something
+
+	Super::OnActivationEnd_Implementation();
 }
 #pragma endregion

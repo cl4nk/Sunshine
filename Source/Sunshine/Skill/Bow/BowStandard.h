@@ -25,6 +25,7 @@ public:
 	virtual void Tick( float deltaTime ) override;
 #pragma endregion
 
+protected:
 #pragma region Events
 	virtual void OnActivationStart_Implementation() override;
 	virtual void OnActivationEnd_Implementation() override;

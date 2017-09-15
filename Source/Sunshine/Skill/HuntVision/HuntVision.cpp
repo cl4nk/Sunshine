@@ -20,9 +20,15 @@ void AHuntVision::Tick( float deltaTime )
 #pragma region Events
 void AHuntVision::OnActivationStart_Implementation()
 {
+	Super::OnActivationStart_Implementation();
+
+	// Do something
 }
 
 void AHuntVision::OnActivationEnd_Implementation()
 {
+	// Do something
+
+	Super::OnActivationEnd_Implementation();
 }
 #pragma endregion

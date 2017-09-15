@@ -21,9 +21,15 @@ void ABowLight::Tick( float deltaTime )
 #pragma region Events
 void ABowLight::OnActivationStart_Implementation()
 {
+	Super::OnActivationStart_Implementation();
+
+	// Do something
 }
 
 void ABowLight::OnActivationEnd_Implementation()
 {
+	// Do something
+
+	Super::OnActivationEnd_Implementation();
 }
 #pragma endregion
