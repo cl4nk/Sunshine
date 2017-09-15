@@ -291,6 +291,8 @@ void ASunshineCharacter::StartSkill( ASkillBase* skill )
 	if ( m_bIsUsingSkill )
 		return;
 
+	m_bIsUsingSkill = true;
+
 	skill->Start();
 }
 
