@@ -7,6 +7,8 @@
 #include "Skill/SkillBase.h"
 #include "SunshineCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE( FOnAction );
+
 UCLASS(config=Game)
 class ASunshineCharacter : public ACharacter
 {
@@ -30,6 +32,12 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate = 45.f;
+
+	/**
+	 * \brief Event called when the character moves after an input
+	 */
+	UPROPERTY(BlueprintAssignable)
+	FOnAction OnInputMovement;
 
 protected:
 	virtual void BeginPlay() override;
@@ -269,7 +277,6 @@ protected:
 	 * \param skill _IN_ The skill to call Finish() on
 	 */
 	void FinishSkill( ASkillBase* skill );
-
 #pragma endregion
 
 private:
