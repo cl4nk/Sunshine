@@ -98,18 +98,18 @@ private:
 
 #pragma region Sun&Shine common Stats
 protected:
-	// TODO: Every Stat should be changed to "EditDefaultsOnly" after debug
+	// TODO: Every Stat should be changed to "EditDefaultsOnly" with "VisibleAnywhere" after debug
 #pragma region Mana
 	/**
 	 * \brief Maximum mana of the Character
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Mana")
+	UPROPERTY(Category = "Stats|Mana", EditAnywhere, BlueprintReadOnly)
 	int m_maxMana = 10;
 
 	/**
 	 * \brief Current mana of the Character
 	 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stats|Mana")
+	UPROPERTY(Category = "Stats|Mana", VisibleAnywhere, BlueprintReadOnly)
 	int m_currentMana = 0;
 #pragma endregion
 
@@ -117,13 +117,13 @@ protected:
 	/**
 	 * \brief Walk speed of the Character
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Walk")
+	UPROPERTY(Category = "Stats|Walk", EditAnywhere, BlueprintReadOnly)
 	float m_walkSpeed = 10.0f;
 
 	/**
 	 * \brief Noise produced by the Character when walking
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Walk")
+	UPROPERTY(Category = "Stats|Walk", EditAnywhere, BlueprintReadOnly)
 	float m_walkNoise = 1.f;
 #pragma endregion
 
@@ -131,13 +131,13 @@ protected:
 	/**
 	 * \brief Run speed of the Character
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Run")
+	UPROPERTY(Category = "Stats|Run", EditAnywhere, BlueprintReadOnly)
 	float m_runSpeed = 20.0f;
 
 	/**
 	 * \brief Noise produced by the Character when running
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Run")
+	UPROPERTY(Category = "Stats|Run", EditAnywhere, BlueprintReadOnly)
 	float m_runNoise = 2.f;
 #pragma endregion
 
@@ -145,13 +145,13 @@ protected:
 	/**
 	 * \brief Crouch speed of the Character
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Crouch")
+	UPROPERTY(Category = "Stats|Crouch", EditAnywhere, BlueprintReadOnly)
 	float m_crouchSpeed = 5.0f;
 
 	/**
 	 * \brief Noise produced by the Character when crouching
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Crouch")
+	UPROPERTY(Category = "Stats|Crouch", EditAnywhere, BlueprintReadOnly)
 	float m_crouchNoise = 0.f;
 #pragma endregion
 
@@ -159,20 +159,20 @@ protected:
 	/**
 	 * \brief Climb speed of the Character
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Climb")
+	UPROPERTY(Category = "Stats|Climb", EditAnywhere, BlueprintReadOnly)
 	float m_climbSpeed = 10.0f;
 
 	/**
 	 * \brief Noise produced by the Character when climbing
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Climb")
+	UPROPERTY(Category = "Stats|Climb", EditAnywhere, BlueprintReadOnly)
 	float m_climbNoise = 0.5f;
 #pragma endregion
 
 	/**
 	 * \brief Noise produced by the Character when jumping
 	 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats|Jump")
+	UPROPERTY(Category = "Stats|Jump", EditAnywhere, BlueprintReadOnly)
 	float m_jumpNoise = 2.f;
 
 	// TODO: projectile to be set
@@ -191,13 +191,13 @@ protected:
 #pragma region Skills
 
 	#pragma region Skill One
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "skills")
+	UPROPERTY(Category = "Skills", EditDefaultsOnly, BlueprintReadWrite)
 	UClass*	m_defaultSkillOne = nullptr;
 
 	/**
 	 * \brief First skill of the character
 	 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Skills")
+	UPROPERTY(Category = "Skills", VisibleAnywhere, BlueprintReadWrite)
 	ASkillBase* m_skillOne = nullptr;
 
 	/**
@@ -212,13 +212,13 @@ protected:
 	#pragma endregion
 
 	#pragma region Skill Two
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Skills")
+	UPROPERTY(Category = "Skills", EditDefaultsOnly, BlueprintReadWrite)
 	UClass*	m_defaultSkillTwo = nullptr;
 
 	/**
 	 * \brief Second skill of the character
 	 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Skills")
+	UPROPERTY(Category = "Skills", VisibleAnywhere, BlueprintReadWrite)
 	ASkillBase* m_skillTwo = nullptr;
 
 	/**
@@ -233,13 +233,13 @@ protected:
 	#pragma endregion
 
 	#pragma region Skill Ultimate
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Skills")
+	UPROPERTY(Category = "Skills", EditDefaultsOnly, BlueprintReadWrite)
 	UClass*	m_defaultSkillUltimate = nullptr;
 
 	/**
 	 * \brief Ultimate skill of the character
 	 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Skills")
+	UPROPERTY(Category = "Skills", VisibleAnywhere, BlueprintReadWrite)
 	ASkillBase* m_skillUltimate = nullptr;
 
 	/**
