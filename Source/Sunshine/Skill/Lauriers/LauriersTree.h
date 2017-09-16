@@ -25,6 +25,8 @@ public:
 	virtual void Tick( float deltaTime ) override;
 #pragma endregion
 
+	void Init( ASunshineCharacter* owner ) override;
+
 protected:
 #pragma region Events
 	virtual void OnActivationStart_Implementation() override;
