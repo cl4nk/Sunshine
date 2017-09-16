@@ -4,7 +4,10 @@
 
 ASkillBase::ASkillBase()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
+	//AActor::RegisterActorTickFunctions( true );
+
+	//PrimaryActorTick.bStartWithTickEnabled = false;
 }
 
 #pragma region Unreal Engine functions

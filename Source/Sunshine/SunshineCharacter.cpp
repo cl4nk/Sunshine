@@ -49,36 +49,33 @@ void ASunshineCharacter::BeginPlay()
 
 	m_currentMana = m_maxMana;
 
-	TSubclassOf<ASkillBase> skillOne = m_defaultSkillOne;
-	if ( skillOne == nullptr )
+	if ( m_defaultSkillOne == nullptr )
 	{
 		UE_LOG( LogTemp, Error, TEXT( "DefaultSkillOne is either null or not valid !" ) );
 	}
 	else
 	{
-		m_skillOne = skillOne.GetDefaultObject();
+		m_skillOne = GWorld->SpawnActor<ASkillBase>(m_defaultSkillOne);
 		m_skillOne->Init( this );
 	}
 
-	TSubclassOf<ASkillBase> skillTwo = m_defaultSkillTwo;
-	if ( skillTwo == nullptr )
+	if ( m_defaultSkillTwo == nullptr )
 	{
 		UE_LOG( LogTemp, Error, TEXT( "DefaultSkillTwo is either null or not valid !" ) );
 	}
 	else
 	{
-		m_skillTwo = skillTwo.GetDefaultObject();
+		m_skillTwo = GWorld->SpawnActor<ASkillBase>(m_defaultSkillTwo);
 		m_skillTwo->Init( this );
 	}
 
-	TSubclassOf<ASkillBase> skillUltimate = m_defaultSkillUltimate;
-	if ( skillUltimate == nullptr )
+	if ( m_defaultSkillUltimate == nullptr )
 	{
 		UE_LOG( LogTemp, Error, TEXT( "DefaultSkillUltimate is either null or not valid !" ) );
 	}
 	else
 	{	
-		m_skillUltimate = skillUltimate.GetDefaultObject();
+		m_skillUltimate = GWorld->SpawnActor<ASkillBase>(m_defaultSkillUltimate);
 		m_skillUltimate->Init( this );
 	}
 }
