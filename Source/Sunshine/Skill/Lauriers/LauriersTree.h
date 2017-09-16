@@ -25,8 +25,41 @@ public:
 	virtual void Tick( float deltaTime ) override;
 #pragma endregion
 
+	void Init( ASunshineCharacter* owner ) override;
+
+protected:
 #pragma region Events
 	virtual void OnActivationStart_Implementation() override;
 	virtual void OnActivationEnd_Implementation() override;
 #pragma endregion
+
+	UFUNCTION( BlueprintCallable )
+	void CancelTransform();
+
+	enum SkillState
+	{
+		Waiting,
+		StartTransformation,
+		IsTransformed,
+		StopTransformation
+	};
+	SkillState	m_skillState = Waiting;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	float m_maxTransformationTime = 5.f;
+
+	UPROPERTY( VisibleAnywhere, BlueprintReadOnly )
+	float m_transformationTime = 0.f;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	UClass *m_treeClass = nullptr;
+
+	UPROPERTY( VisibleAnywhere, BlueprintReadOnly )
+	AActor *m_treeInstance = nullptr;
+
+private:
+	void TickWaiting();
+	void TickStartTransformation();
+	void TickIsTransformed( const float deltaTime );
+	void TickStopTransformation();
 };

@@ -25,8 +25,32 @@ public:
 	virtual void Tick( float deltaTime ) override;
 #pragma endregion
 
+	void Init( ASunshineCharacter* owner ) override;
+
+protected:
 #pragma region Events
 	virtual void OnActivationStart_Implementation() override;
 	virtual void OnActivationEnd_Implementation() override;
 #pragma endregion
+
+	enum SkillState
+	{
+		Waiting,
+		StartHuntVision,
+		ActiveHuntVision,
+		StopHuntVision
+	};
+	SkillState m_skillState = Waiting;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	float m_maxHuntvisionTime = 30.f;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	float m_huntVisionTime = 0.f;
+
+private:
+	void TickWaiting();
+	void TickStartHuntVision();
+	void TickActiveHuntVision( const float deltaTime );
+	void TickStopHuntVision();
 };

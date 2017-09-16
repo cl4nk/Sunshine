@@ -25,8 +25,16 @@ public:
 	virtual void Tick( float deltaTime ) override;
 #pragma endregion
 
+protected:
 #pragma region Events
-	virtual void OnActivationStart_Implementation() override;
-	virtual void OnActivationEnd_Implementation() override;
+	void OnActivationStart_Implementation() override;
+	void OnActivationEnd_Implementation() override;
+
+	/**
+	 * \brief Called when player fails its QTE
+	 */
+	UFUNCTION(BlueprintNativeEvent, Category = "Events")
+	void OnFailedPlaying();
+	void OnFailedPlaying_Implementation();
 #pragma endregion
 };
