@@ -21,9 +21,20 @@ void ALyrePlaying::Tick( float deltaTime )
 #pragma region Events
 void ALyrePlaying::OnActivationStart_Implementation()
 {
+	Super::OnActivationStart_Implementation();
+
+	// Do something
 }
 
 void ALyrePlaying::OnActivationEnd_Implementation()
 {
+	// Do something
+
+	Super::OnActivationEnd_Implementation();
+}
+
+void ALyrePlaying::OnFailedPlaying_Implementation()
+{
+	// Do something
 }
 #pragma endregion

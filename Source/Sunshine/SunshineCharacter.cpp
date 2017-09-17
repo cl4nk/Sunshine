@@ -17,8 +17,6 @@ ASunshineCharacter::ASunshineCharacter()
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
-	m_currentMana = m_maxMana;
-
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -43,6 +41,43 @@ ASunshineCharacter::ASunshineCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+}
+
+void ASunshineCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	m_currentMana = m_maxMana;
+
+	if ( m_defaultSkillOne == nullptr )
+	{
+		UE_LOG( LogTemp, Error, TEXT( "DefaultSkillOne is either null or not valid !" ) );
+	}
+	else
+	{
+		m_skillOne = GWorld->SpawnActor<ASkillBase>(m_defaultSkillOne);
+		m_skillOne->Init( this );
+	}
+
+	if ( m_defaultSkillTwo == nullptr )
+	{
+		UE_LOG( LogTemp, Error, TEXT( "DefaultSkillTwo is either null or not valid !" ) );
+	}
+	else
+	{
+		m_skillTwo = GWorld->SpawnActor<ASkillBase>(m_defaultSkillTwo);
+		m_skillTwo->Init( this );
+	}
+
+	if ( m_defaultSkillUltimate == nullptr )
+	{
+		UE_LOG( LogTemp, Error, TEXT( "DefaultSkillUltimate is either null or not valid !" ) );
+	}
+	else
+	{	
+		m_skillUltimate = GWorld->SpawnActor<ASkillBase>(m_defaultSkillUltimate);
+		m_skillUltimate->Init( this );
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -72,8 +107,30 @@ void ASunshineCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ASunshineCharacter::OnResetVR);
+
+	// Skills
+	PlayerInputComponent->BindAction("SkillOne", IE_Pressed, this, &ASunshineCharacter::SkillOnePressed);
+	PlayerInputComponent->BindAction("SkillOne", IE_Released, this, &ASunshineCharacter::SkillOneReleased);
+	PlayerInputComponent->BindAction("SkillTwo", IE_Pressed, this, &ASunshineCharacter::SkillTwoPressed);
+	PlayerInputComponent->BindAction("SkillTwo", IE_Released, this, &ASunshineCharacter::SkillTwoReleased);
+	PlayerInputComponent->BindAction("SkillUltimate", IE_Pressed, this, &ASunshineCharacter::SkillUltimatePressed);
+	PlayerInputComponent->BindAction("SkillUltimate", IE_Released, this, &ASunshineCharacter::SkillUltimateReleased);
 }
 
+bool ASunshineCharacter::IsHidden() const
+{
+	return m_hidingBushNum > 0;
+}
+
+void ASunshineCharacter::BeginHiding()
+{
+	++m_hidingBushNum;
+}
+
+void ASunshineCharacter::EndHiding()
+{
+	--m_hidingBushNum;
+}
 
 void ASunshineCharacter::OnResetVR()
 {
@@ -130,6 +187,8 @@ void ASunshineCharacter::MoveForward(float Value)
 {
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
+		OnInputMovement.Broadcast();
+
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -144,6 +203,8 @@ void ASunshineCharacter::MoveRight(float Value)
 {
 	if ( (Controller != NULL) && (Value != 0.0f) )
 	{
+		OnInputMovement.Broadcast();
+		
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -178,11 +239,68 @@ void ASunshineCharacter::LeaveCover()
 {
 }
 
-void ASunshineCharacter::SkillOne()
+void ASunshineCharacter::SkillOnePressed()
 {
+	if ( m_skillOne == nullptr )
+		return;
+
+	StartSkill( m_skillOne );
 }
 
-void ASunshineCharacter::SkillTwo()
+void ASunshineCharacter::SkillOneReleased()
 {
+	if ( m_skillOne == nullptr )
+		return;
+
+	FinishSkill( m_skillOne );
+}
+
+void ASunshineCharacter::SkillTwoPressed()
+{
+	if ( m_skillTwo == nullptr )
+		return;
+
+	StartSkill( m_skillTwo );
+}
+
+void ASunshineCharacter::SkillTwoReleased()
+{
+	if ( m_skillTwo == nullptr )
+		return;
+
+	FinishSkill( m_skillTwo );
+}
+
+void ASunshineCharacter::SkillUltimatePressed()
+{
+	if ( m_skillUltimate == nullptr )
+		return;
+
+	StartSkill( m_skillUltimate );
+}
+
+void ASunshineCharacter::SkillUltimateReleased()
+{
+	if ( m_skillUltimate == nullptr )
+		return;
+
+	FinishSkill( m_skillUltimate );
+}
+
+void ASunshineCharacter::StartSkill( ASkillBase* skill )
+{
+	if ( m_bIsUsingSkill )
+		return;
+
+	m_bIsUsingSkill = true;
+
+	skill->Start();
+}
+
+void ASunshineCharacter::FinishSkill( ASkillBase* skill )
+{
+	skill->Finish();
+
+	m_bIsUsingSkill = false;
 }
 #pragma endregion
