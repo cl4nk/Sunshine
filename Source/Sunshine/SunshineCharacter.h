@@ -22,6 +22,9 @@ class ASunshineCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class UPawnNoiseEmitterComponent* NoiseEmitter;
+
 public:
 	ASunshineCharacter();	
 
@@ -42,9 +45,17 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	bool IsRunning = false;
+	UPROPERTY(Category = "CharacrterMovement", VisibleAnywhere, BlueprintReadOnly)
+	bool JogPressed = false;
 
-	bool IsCrouching = false;
+	UPROPERTY(Category = "CharacrterMovement", VisibleAnywhere, BlueprintReadOnly)
+	bool CrouchPressed = false;
+
+	UPROPERTY(Category = "CharacrterMovement", VisibleAnywhere, BlueprintReadOnly)
+	bool JumpPressed = false;
+
+	UPROPERTY(Category = "CharacrterMovement", VisibleAnywhere, BlueprintReadOnly)
+	bool DisableMovement = false;
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
@@ -66,10 +77,18 @@ protected:
 	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
 	 */
 	void LookUpAtRate( float Rate );
-
-	void Crouch();
-
-	void StopCrouch();
+	
+	void OnJogPressed();
+	
+	void OnJogReleased();
+	
+	void OnJumpPressed();
+	
+	void OnJumpReleased();
+	
+	void OnCrouchPressed();
+	
+	void OnCrouchReleased();
 
 	void Run();
 
@@ -89,14 +108,32 @@ protected:
 	// End of APawn interface
 
 public:
-	UFUNCTION( BlueprintCallable )
+	UFUNCTION( BlueprintCallable, Category = "Infiltration System")
 	bool IsHidden() const;
 
-	UFUNCTION( BlueprintCallable )
+	UFUNCTION( BlueprintCallable, Category = "Infiltration System")
 	void BeginHiding();
 
-	UFUNCTION( BlueprintCallable )
+	UFUNCTION( BlueprintCallable, Category = "Infiltration System")
 	void EndHiding();
+
+	UFUNCTION(BlueprintCallable, Category = "Infiltration System")
+	void EmitWalkNoise();
+
+	UFUNCTION(BlueprintCallable, Category = "Infiltration System")
+	void EmitRunNoise();
+
+	UFUNCTION(BlueprintCallable, Category = "Infiltration System")
+	void EmitJumpStartNoise();
+
+	UFUNCTION(BlueprintCallable, Category = "Infiltration System")
+	void EmitJumpEndNoise();
+
+	UFUNCTION(BlueprintCallable, Category = "Infiltration System")
+	void EmitCrouchNoise();
+
+	UFUNCTION(BlueprintCallable, Category = "Infiltration System")
+	void EmitNoise(const float &Loudness);
 
 private:
 	/**
@@ -126,7 +163,7 @@ protected:
 	 * \brief Walk speed of the Character
 	 */
 	UPROPERTY(Category = "Stats|Walk", EditAnywhere, BlueprintReadOnly)
-	float m_walkSpeed = 10.0f;
+	float m_walkSpeed = 200.0f;
 
 	/**
 	 * \brief Noise produced by the Character when walking
@@ -140,7 +177,7 @@ protected:
 	 * \brief Run speed of the Character
 	 */
 	UPROPERTY(Category = "Stats|Run", EditAnywhere, BlueprintReadOnly)
-	float m_runSpeed = 20.0f;
+	float m_runSpeed = 675.0f;
 
 	/**
 	 * \brief Noise produced by the Character when running
@@ -154,7 +191,7 @@ protected:
 	 * \brief Crouch speed of the Character
 	 */
 	UPROPERTY(Category = "Stats|Crouch", EditAnywhere, BlueprintReadOnly)
-	float m_crouchSpeed = 5.0f;
+	float m_crouchSpeed = 160.0f;
 
 	/**
 	 * \brief Noise produced by the Character when crouching
@@ -313,4 +350,6 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	/** Returns NoiseEmitter subobject **/
+	FORCEINLINE class UPawnNoiseEmitterComponent* GetNoiseEmitter() const { return NoiseEmitter; }
 };
