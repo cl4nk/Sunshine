@@ -2,13 +2,13 @@
 
 #include "ArrowPlague.h"
 
-void UArrowPlague::OnOverlapBegin( UPrimitiveComponent* overlappedComp, AActor* otherActor,
+void AArrowPlague::OnOverlapBegin( UPrimitiveComponent* overlappedComp, AActor* otherActor,
                                    UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep,
                                    const FHitResult& sweepResult )
 {
 }
 
-void UArrowPlague::OnOverlapEnd( UPrimitiveComponent* overlappedComp, AActor* otherActor,
+void AArrowPlague::OnOverlapEnd( UPrimitiveComponent* overlappedComp, AActor* otherActor,
                                  UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep,
                                  const FHitResult& sweepResult )
 {

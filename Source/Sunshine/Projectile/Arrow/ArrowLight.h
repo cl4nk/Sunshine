@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Projectile/Arrow/ArrowBase.h"
+#include "Projectile/Arrow/Arrow.h"
 #include "ArrowLight.generated.h"
 
 /**
  * Light arrow capable of creating light zones that Sun can use to teleport
  */
 UCLASS()
-class SUNSHINE_API UArrowLight : public UArrowBase
+class SUNSHINE_API AArrowLight : public AArrow
 {
 	GENERATED_BODY()
 
