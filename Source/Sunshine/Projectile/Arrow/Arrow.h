@@ -25,6 +25,8 @@ public:
 	virtual void Tick( float deltaTime ) override;
 #pragma endregion
 
+	void InitVelocity( FVector direction );
+
 protected:
 	/**
 	 * \brief Function called when overlap with another object begins
@@ -39,6 +41,12 @@ protected:
 	UFUNCTION( Category = "Collision", BlueprintCallable )
 	virtual void OnOverlapEnd( UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp,
 	                           int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult );
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float m_powerVelocity = 2000.f;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	UPrimitiveComponent* m_rootPrimitiveComponent = nullptr;
 
 private:
 	/**

@@ -197,7 +197,7 @@ private:
 #pragma region Sun&Shine common Functions
 protected:
 #pragma region Skills
-
+	// Change from UClass to TSubClassOf<ASkillBase>
 	#pragma region Skill One
 	UPROPERTY(Category = "Skills", EditDefaultsOnly, BlueprintReadWrite)
 	UClass*	m_defaultSkillOne = nullptr;

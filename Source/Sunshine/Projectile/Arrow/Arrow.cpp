@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Arrow.h"
-
+#include "Components/PrimitiveComponent.h"
 
 // Sets default values
 AArrow::AArrow()
@@ -20,6 +20,11 @@ void AArrow::BeginPlay()
 void AArrow::Tick( float deltaTime )
 {
 	Super::Tick( deltaTime );
+}
+
+void AArrow::InitVelocity( FVector direction )
+{
+	m_rootPrimitiveComponent->AddImpulse( direction * m_powerVelocity );
 }
 
 void AArrow::OnOverlapBegin( UPrimitiveComponent* overlappedComp, AActor* otherActor,
