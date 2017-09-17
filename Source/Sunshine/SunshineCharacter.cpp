@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/PawnNoiseEmitterComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -27,6 +28,8 @@ ASunshineCharacter::ASunshineCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
 	GetCharacterMovement()->JumpZVelocity = 600.f;
 	GetCharacterMovement()->AirControl = 0.2f;
+	
+	GetCharacterMovement()->MaxWalkSpeed = m_walkSpeed;
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -39,6 +42,7 @@ ASunshineCharacter::ASunshineCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	NoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("NoiseEmitter"));
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
@@ -87,8 +91,15 @@ void ASunshineCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASunshineCharacter::OnJumpPressed);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ASunshineCharacter::OnJumpReleased);
+	
+	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &ASunshineCharacter::OnCrouchPressed);
+	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &ASunshineCharacter::OnCrouchReleased);
+	
+	PlayerInputComponent->BindAction("Jog", IE_Pressed, this, &ASunshineCharacter::OnJogPressed);
+	PlayerInputComponent->BindAction("Jog", IE_Released, this, &ASunshineCharacter::OnJogReleased);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASunshineCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASunshineCharacter::MoveRight);
@@ -132,6 +143,36 @@ void ASunshineCharacter::EndHiding()
 	--m_hidingBushNum;
 }
 
+void ASunshineCharacter::EmitWalkNoise()
+{
+	NoiseEmitter->MakeNoise(this, m_walkNoise, GetActorLocation());
+}
+
+void ASunshineCharacter::EmitRunNoise()
+{
+	NoiseEmitter->MakeNoise(this, m_runNoise, GetActorLocation());
+}
+
+void ASunshineCharacter::EmitJumpStartNoise()
+{
+	NoiseEmitter->MakeNoise(this, m_jumpNoise, GetActorLocation());
+}
+
+void ASunshineCharacter::EmitJumpEndNoise()
+{
+	NoiseEmitter->MakeNoise(this, m_jumpNoise, GetActorLocation());
+}
+
+void ASunshineCharacter::EmitCrouchNoise()
+{
+	NoiseEmitter->MakeNoise(this, m_crouchNoise, GetActorLocation());
+}
+
+void ASunshineCharacter::EmitNoise(const float &Loudness)
+{
+	NoiseEmitter->MakeNoise(this, Loudness, GetActorLocation());
+}
+
 void ASunshineCharacter::OnResetVR()
 {
 	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
@@ -157,26 +198,6 @@ void ASunshineCharacter::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
-}
-
-void ASunshineCharacter::Crouch()
-{
-	IsCrouching = true;
-}
-
-void ASunshineCharacter::StopCrouch()
-{
-	IsCrouching = false;
-}
-
-void ASunshineCharacter::Run()
-{
-	IsRunning = true;
-}
-
-void ASunshineCharacter::StopRun()
-{
-	IsRunning = false;
 }
 
 void ASunshineCharacter::Fall()
@@ -214,6 +235,49 @@ void ASunshineCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void ASunshineCharacter::OnJogPressed()
+{
+	JogPressed = true;
+	GetCharacterMovement()->MaxWalkSpeed = m_runSpeed;
+}
+
+void ASunshineCharacter::OnJogReleased()
+{
+	JogPressed = false;
+	if (CrouchPressed)
+		GetCharacterMovement()->MaxWalkSpeed = m_crouchSpeed;
+	else
+		GetCharacterMovement()->MaxWalkSpeed = m_walkSpeed;
+}
+
+void ASunshineCharacter::OnJumpPressed()
+{
+	JumpPressed = true;
+	Jump();
+}
+
+void ASunshineCharacter::OnJumpReleased()
+{
+	JumpPressed = false;
+	StopJumping();
+}
+
+void ASunshineCharacter::OnCrouchPressed()
+{
+	CrouchPressed = true;
+	if (!JogPressed)
+		GetCharacterMovement()->MaxWalkSpeed = m_crouchSpeed;
+}
+
+void ASunshineCharacter::OnCrouchReleased()
+{
+	CrouchPressed = false;
+	if (JogPressed)
+		GetCharacterMovement()->MaxWalkSpeed = m_runSpeed;
+	else
+		GetCharacterMovement()->MaxWalkSpeed = m_walkSpeed;
 }
 
 #pragma region Sun&Shine common Functions
