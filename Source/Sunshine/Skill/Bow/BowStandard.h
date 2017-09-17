@@ -3,28 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Skill/Bow/BowBase.h"
+#include "Skill/Bow/Bow.h"
 #include "BowStandard.generated.h"
 
 /**
- * Shoots a standard arrow which can kill animals or alert enemies
+ * 
  */
 UCLASS()
-class SUNSHINE_API ABowStandard : public ABowBase
+class SUNSHINE_API ABowStandard : public ABow
 {
 	GENERATED_BODY()
 
 public:
-	virtual ~ABowStandard() = default;
-
-#pragma region Unreal Engine functions
-protected:
-	virtual void BeginPlay() override;
-
-public:
-	virtual void Tick( float deltaTime ) override;
-#pragma endregion
-
+	void ShootArmed();
+	
 protected:
 #pragma region Events
 	virtual void OnActivationStart_Implementation() override;

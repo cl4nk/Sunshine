@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Projectile/Arrow/ArrowBase.h"
+#include "Projectile/Arrow/Arrow.h"
 #include "ArrowStandard.generated.h"
 
 /**
  * Standard arrow that can kill or alert animals or alert enemies
  */
 UCLASS()
-class SUNSHINE_API UArrowStandard : public UArrowBase
+class SUNSHINE_API AArrowStandard : public AArrow
 {
 	GENERATED_BODY()
 

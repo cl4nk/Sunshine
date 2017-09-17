@@ -29,6 +29,7 @@ void ALauriersTree::Tick( float deltaTime )
 			break;
 	}
 }
+#pragma endregion
 
 void ALauriersTree::Init( ASunshineCharacter* owner )
 {
@@ -40,7 +41,6 @@ void ALauriersTree::Init( ASunshineCharacter* owner )
 
 	m_skillState = Waiting;
 }
-#pragma endregion
 
 #pragma region Events
 void ALauriersTree::OnActivationStart_Implementation()

@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Projectile/Arrow/ArrowBase.h"
+#include "Projectile/Arrow/Arrow.h"
 #include "ArrowPlague.generated.h"
 
 /**
  * Plague arrow capable of killing an enemy
  */
 UCLASS()
-class SUNSHINE_API UArrowPlague : public UArrowBase
+class SUNSHINE_API AArrowPlague : public AArrow
 {
 	GENERATED_BODY()
 

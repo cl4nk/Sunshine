@@ -28,6 +28,7 @@ void AHuntVision::Tick( float deltaTime )
 			break;
 	}
 }
+#pragma endregion
 
 void AHuntVision::Init( ASunshineCharacter* owner )
 {
@@ -39,7 +40,6 @@ void AHuntVision::Init( ASunshineCharacter* owner )
 
 	m_skillState = Waiting;
 }
-#pragma endregion
 
 #pragma region Events
 void AHuntVision::OnActivationStart_Implementation()

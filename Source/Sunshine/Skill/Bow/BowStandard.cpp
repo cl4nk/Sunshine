@@ -2,34 +2,30 @@
 
 #include "BowStandard.h"
 
-#pragma region Unreal Engine functions
-void ABowStandard::BeginPlay()
+void ABowStandard::ShootArmed()
 {
-	Super::BeginPlay();
-
-	// Does not cost mana nor make noise when shot
-	m_manaCost = 0;
-	m_noiseValue = 0.0f;
+	Shoot();
 }
 
-void ABowStandard::Tick( float deltaTime )
-{
-	Super::Tick( deltaTime );
-}
-#pragma endregion
-
-#pragma region Events
 void ABowStandard::OnActivationStart_Implementation()
 {
 	Super::OnActivationStart_Implementation();
 
-	// Do something
+	if ( m_owner == nullptr )
+	{
+		UE_LOG( LogTemp, Error, TEXT( "Owner is nullptr !" ) );
+		return;
+	}
+
+	if ( m_arrowInstance != nullptr )
+		return;
+
+	Bend();
 }
 
 void ABowStandard::OnActivationEnd_Implementation()
 {
-	// Do something
+	Cancel();
 
 	Super::OnActivationEnd_Implementation();
 }
-#pragma endregion

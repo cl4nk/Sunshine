@@ -45,7 +45,7 @@ protected:
 	};
 	SkillState	m_skillState = Waiting;
 
-	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite )
 	float m_maxTransformationTime = 5.f;
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly )
