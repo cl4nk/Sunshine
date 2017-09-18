@@ -89,11 +89,9 @@ protected:
 	void OnCrouchPressed();
 	
 	void OnCrouchReleased();
-
-	void Run();
-
-	void StopRun();
-
+	
+	void UpdateWalkSpeed();
+	
 	void Fall();
 
 	/** Handler for when a touch input begins. */
@@ -321,6 +319,9 @@ protected:
 	
 	UPROPERTY(Category = "Skills", VisibleAnywhere, BlueprintReadOnly)
 	int m_skillUsed = -1;
+	
+	UPROPERTY(Category = "Skills", EditAnywhere)
+	FString m_socketName = "RightHandSocket";
 
 	/**
 	 * \brief Starts the skill
@@ -349,6 +350,8 @@ private:
 #pragma endregion
 
 public:
+	/** Returns CameraBoom subobject **/
+	FORCEINLINE FString GetShootSocket() const { return m_socketName; }
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/

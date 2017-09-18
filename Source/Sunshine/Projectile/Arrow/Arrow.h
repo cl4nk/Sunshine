@@ -26,6 +26,10 @@ public:
 #pragma endregion
 
 	void InitVelocity( FVector direction );
+	
+	void AttachItemTo(USkeletalMeshComponent *meshRoot, FName socket);
+	
+	void DetachItem();
 
 protected:
 	/**
@@ -42,6 +46,7 @@ protected:
 	virtual void OnOverlapEnd( UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp,
 	                           int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult );
 
+							   
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float m_powerVelocity = 2000.f;
 

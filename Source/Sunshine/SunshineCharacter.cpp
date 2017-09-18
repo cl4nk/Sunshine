@@ -251,16 +251,13 @@ void ASunshineCharacter::MoveRight(float Value)
 void ASunshineCharacter::OnJogPressed()
 {
 	JogPressed = true;
-	GetCharacterMovement()->MaxWalkSpeed = m_runSpeed;
+	UpdateWalkSpeed();
 }
 
 void ASunshineCharacter::OnJogReleased()
 {
 	JogPressed = false;
-	if (CrouchPressed)
-		GetCharacterMovement()->MaxWalkSpeed = m_crouchSpeed;
-	else
-		GetCharacterMovement()->MaxWalkSpeed = m_walkSpeed;
+	UpdateWalkSpeed();
 }
 
 void ASunshineCharacter::OnJumpPressed()
@@ -278,16 +275,24 @@ void ASunshineCharacter::OnJumpReleased()
 void ASunshineCharacter::OnCrouchPressed()
 {
 	CrouchPressed = true;
-	if (!JogPressed)
-		GetCharacterMovement()->MaxWalkSpeed = m_crouchSpeed;
+	UpdateWalkSpeed();
 }
 
 void ASunshineCharacter::OnCrouchReleased()
 {
-	CrouchPressed = false;
-	if (JogPressed)
+	CrouchPressed = false;	
+	UpdateWalkSpeed();
+}
+
+void ASunshineCharacter::UpdateWalkSpeed()
+{
+	if (CrouchPressed)
+		GetCharacterMovement()->MaxWalkSpeed = m_crouchSpeed;
+	else if (m_bIsUsingSkill)
+		GetCharacterMovement()->MaxWalkSpeed = m_walkSpeed;
+	else if (JogPressed)
 		GetCharacterMovement()->MaxWalkSpeed = m_runSpeed;
-	else
+	else 
 		GetCharacterMovement()->MaxWalkSpeed = m_walkSpeed;
 }
 
@@ -384,11 +389,6 @@ void ASunshineCharacter::FinishSkill( ASkillBase* skill )
 	m_skillUsed = -1;
 	m_bIsUsingSkill = false;
 	
-	if (CrouchPressed)
-		GetCharacterMovement()->MaxWalkSpeed = m_crouchSpeed;
-	else if (JogPressed)
-		GetCharacterMovement()->MaxWalkSpeed = m_runSpeed;
-	else 
-		GetCharacterMovement()->MaxWalkSpeed = m_walkSpeed;
+	UpdateWalkSpeed();
 }
 #pragma endregion

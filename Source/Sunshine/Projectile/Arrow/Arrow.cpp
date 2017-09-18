@@ -59,3 +59,25 @@ void AArrow::OnOverlapEndBase( UPrimitiveComponent* overlappedComp, AActor* othe
 		OnOverlapEnd( overlappedComp, otherActor, otherComp, otherBodyIndex, bFromSweep, sweepResult );
 	}
 }
+
+void	AArrow::AttachItemTo(USkeletalMeshComponent *meshRoot, FName socket)
+{
+	AttachToComponent(meshRoot, FAttachmentTransformRules::SnapToTargetNotIncludingScale, socket);
+
+	SetActorRelativeLocation(FVector::ZeroVector);
+	SetActorRelativeRotation(FRotator::ZeroRotator);
+	
+	m_rootPrimitiveComponent->SetSimulatePhysics(false);
+	m_rootPrimitiveComponent->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
+		
+}
+
+void	AArrow::DetachItem()
+{
+	if (m_rootPrimitiveComponent)
+	{
+		m_rootPrimitiveComponent->SetSimulatePhysics(true);
+		m_rootPrimitiveComponent->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+	}
+	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+}
