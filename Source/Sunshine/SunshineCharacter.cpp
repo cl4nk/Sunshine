@@ -72,16 +72,27 @@ void ASunshineCharacter::BeginPlay()
 		m_skillTwo = GWorld->SpawnActor<ASkillBase>(m_defaultSkillTwo);
 		m_skillTwo->Init( this );
 	}
-
-	if ( m_defaultSkillUltimate == nullptr )
+	
+	if ( m_defaultSkillThree == nullptr )
 	{
-		UE_LOG( LogTemp, Error, TEXT( "DefaultSkillUltimate is either null or not valid !" ) );
+		UE_LOG( LogTemp, Error, TEXT( "DefaultSkillThree is either null or not valid !" ) );
 	}
 	else
-	{	
-		m_skillUltimate = GWorld->SpawnActor<ASkillBase>(m_defaultSkillUltimate);
-		m_skillUltimate->Init( this );
+	{
+		m_skillThree = GWorld->SpawnActor<ASkillBase>(m_defaultSkillThree);
+		m_skillThree->Init( this );
 	}
+	
+	if ( m_defaultSkillFour == nullptr )
+	{
+		UE_LOG( LogTemp, Error, TEXT( "DefaultSkillFour is either null or not valid !" ) );
+	}
+	else
+	{
+		m_skillFour = GWorld->SpawnActor<ASkillBase>(m_defaultSkillFour);
+		m_skillFour->Init( this );
+	}
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -124,8 +135,8 @@ void ASunshineCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 	PlayerInputComponent->BindAction("SkillOne", IE_Released, this, &ASunshineCharacter::SkillOneReleased);
 	PlayerInputComponent->BindAction("SkillTwo", IE_Pressed, this, &ASunshineCharacter::SkillTwoPressed);
 	PlayerInputComponent->BindAction("SkillTwo", IE_Released, this, &ASunshineCharacter::SkillTwoReleased);
-	PlayerInputComponent->BindAction("SkillUltimate", IE_Pressed, this, &ASunshineCharacter::SkillUltimatePressed);
-	PlayerInputComponent->BindAction("SkillUltimate", IE_Released, this, &ASunshineCharacter::SkillUltimateReleased);
+	PlayerInputComponent->BindAction("SkillThree", IE_Pressed, this, &ASunshineCharacter::SkillThreePressed);
+	PlayerInputComponent->BindAction("SkillThree", IE_Released, this, &ASunshineCharacter::SkillThreeReleased);
 }
 
 bool ASunshineCharacter::IsHidden() const
@@ -281,20 +292,6 @@ void ASunshineCharacter::OnCrouchReleased()
 }
 
 #pragma region Sun&Shine common Functions
-void ASunshineCharacter::RangeWeaponPressed()
-{
-	m_bIsFocusing = true;
-}
-
-void ASunshineCharacter::RangeWeaponReleased()
-{
-	m_bIsFocusing = false;
-}
-
-void ASunshineCharacter::RangeWeapon()
-{
-}
-
 void ASunshineCharacter::TakeCover()
 {
 }
@@ -308,7 +305,7 @@ void ASunshineCharacter::SkillOnePressed()
 	if ( m_skillOne == nullptr )
 		return;
 
-	StartSkill( m_skillOne );
+	StartSkill( m_skillOne, 0 );
 }
 
 void ASunshineCharacter::SkillOneReleased()
@@ -324,7 +321,7 @@ void ASunshineCharacter::SkillTwoPressed()
 	if ( m_skillTwo == nullptr )
 		return;
 
-	StartSkill( m_skillTwo );
+	StartSkill( m_skillTwo, 1 );
 }
 
 void ASunshineCharacter::SkillTwoReleased()
@@ -335,36 +332,63 @@ void ASunshineCharacter::SkillTwoReleased()
 	FinishSkill( m_skillTwo );
 }
 
-void ASunshineCharacter::SkillUltimatePressed()
+void ASunshineCharacter::SkillThreePressed()
 {
-	if ( m_skillUltimate == nullptr )
+	if ( m_skillThree == nullptr )
 		return;
 
-	StartSkill( m_skillUltimate );
+	StartSkill( m_skillThree, 2 );
 }
 
-void ASunshineCharacter::SkillUltimateReleased()
+void ASunshineCharacter::SkillThreeReleased()
 {
-	if ( m_skillUltimate == nullptr )
+	if ( m_skillThree == nullptr )
 		return;
 
-	FinishSkill( m_skillUltimate );
+	FinishSkill( m_skillThree );
 }
 
-void ASunshineCharacter::StartSkill( ASkillBase* skill )
+void ASunshineCharacter::SkillFourPressed()
+{
+	if ( m_skillFour == nullptr )
+		return;
+
+	StartSkill( m_skillFour, 3 );
+}
+
+void ASunshineCharacter::SkillFourReleased()
+{
+	if ( m_skillFour == nullptr )
+		return;
+
+	FinishSkill( m_skillFour );
+}
+
+void ASunshineCharacter::StartSkill( ASkillBase* skill, int index )
 {
 	if ( m_bIsUsingSkill )
 		return;
 
 	m_bIsUsingSkill = true;
+	m_skillUsed = index;
 
 	skill->Start();
+	
+	GetCharacterMovement()->MaxWalkSpeed = m_walkSpeed;
 }
 
 void ASunshineCharacter::FinishSkill( ASkillBase* skill )
 {
 	skill->Finish();
 
+	m_skillUsed = -1;
 	m_bIsUsingSkill = false;
+	
+	if (CrouchPressed)
+		GetCharacterMovement()->MaxWalkSpeed = m_crouchSpeed;
+	else if (JogPressed)
+		GetCharacterMovement()->MaxWalkSpeed = m_runSpeed;
+	else 
+		GetCharacterMovement()->MaxWalkSpeed = m_walkSpeed;
 }
 #pragma endregion

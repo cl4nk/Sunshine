@@ -45,16 +45,16 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(Category = "CharacrterMovement", VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = "CharacterMovement", VisibleAnywhere, BlueprintReadOnly)
 	bool JogPressed = false;
 
-	UPROPERTY(Category = "CharacrterMovement", VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = "CharacterMovement", VisibleAnywhere, BlueprintReadOnly)
 	bool CrouchPressed = false;
 
-	UPROPERTY(Category = "CharacrterMovement", VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = "CharacterMovement", VisibleAnywhere, BlueprintReadOnly)
 	bool JumpPressed = false;
 
-	UPROPERTY(Category = "CharacrterMovement", VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(Category = "CharacterMovement", VisibleAnywhere, BlueprintReadOnly)
 	bool DisableMovement = false;
 
 	/** Resets HMD orientation in VR. */
@@ -205,7 +205,7 @@ protected:
 	 * \brief Climb speed of the Character
 	 */
 	UPROPERTY(Category = "Stats|Climb", EditAnywhere, BlueprintReadOnly)
-	float m_climbSpeed = 10.0f;
+	float m_climbSpeed = 150.0f;
 
 	/**
 	 * \brief Noise produced by the Character when climbing
@@ -223,12 +223,6 @@ protected:
 	// TODO: projectile to be set
 	// UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 	// Projectile* m_weapon = nullptr;
-
-private:
-	/**
-	 * \brief Tells wether the character is focusing with his range weapon or not
-	 */
-	bool m_bIsFocusing = false;
 #pragma endregion
 
 #pragma region Sun&Shine common Functions
@@ -276,38 +270,63 @@ protected:
 	 */
 	void SkillTwoReleased();
 	#pragma endregion
-
-	#pragma region Skill Ultimate
+	
+	#pragma region Skill Three
 	UPROPERTY(Category = "Skills", EditDefaultsOnly, BlueprintReadWrite)
-	UClass*	m_defaultSkillUltimate = nullptr;
+	UClass*	m_defaultSkillThree = nullptr;
 
 	/**
-	 * \brief Ultimate skill of the character
+	 * \brief Third skill of the character
 	 */
 	UPROPERTY(Category = "Skills", VisibleAnywhere, BlueprintReadWrite)
-	ASkillBase* m_skillUltimate = nullptr;
+	ASkillBase* m_skillThree = nullptr;
 
 	/**
-	 * \brief Try to execute ultimate skill
+	 * \brief Try to execute skill three
 	 */
-	void SkillUltimatePressed();
+	void SkillThreePressed();
 
 	/**
 	 * \brief Try to end skill one execution
 	 */
-	void SkillUltimateReleased();
+	void SkillThreeReleased();
+	#pragma endregion
+	
+	#pragma region Skill Four
+	UPROPERTY(Category = "Skills", EditDefaultsOnly, BlueprintReadWrite)
+	UClass*	m_defaultSkillFour = nullptr;
+
+	/**
+	 * \brief Fourth skill of the character
+	 */
+	UPROPERTY(Category = "Skills", VisibleAnywhere, BlueprintReadWrite)
+	ASkillBase* m_skillFour = nullptr;
+
+	/**
+	 * \brief Try to execute skill four
+	 */
+	void SkillFourPressed();
+
+	/**
+	 * \brief Try to end skill one execution
+	 */
+	void SkillFourReleased();
 	#pragma endregion
 
 	/**
 	 * \brief Is a skill being used or not
 	 */
+	UPROPERTY(Category = "Skills", VisibleAnywhere, BlueprintReadOnly)
 	bool m_bIsUsingSkill = false;
+	
+	UPROPERTY(Category = "Skills", VisibleAnywhere, BlueprintReadOnly)
+	int m_skillUsed = -1;
 
 	/**
 	 * \brief Starts the skill
 	 * \param skill _IN_ The skill to call Start() on
 	 */
-	void StartSkill( ASkillBase* skill );
+	void StartSkill( ASkillBase* skill, int index );
 
 	/**
 	 * \brief Finishes the skill
@@ -317,22 +336,6 @@ protected:
 #pragma endregion
 
 private:
-	/**
-	 * \brief Called when RangeWeapon key is pressed
-	 */
-	void RangeWeaponPressed();
-
-	/**
-	 * \brief Called when RangeWeapon key is released
-	 */
-	void RangeWeaponReleased();
-
-	/**
-	 * \brief Execute Ranged Weapon
-	 * \note Is private because the way Shine and Sun uses their ranged weapon is the same
-	 *		 Only the type of weapon will change, and change the effect
-	 */
-	void RangeWeapon();
 
 	/**
 	 * \brief Called when taking cover
