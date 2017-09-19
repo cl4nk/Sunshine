@@ -51,14 +51,18 @@ void ABow::Shoot()
 	{
 		UE_LOG( LogTemp, Warning, TEXT( "Shoot arrow !" ) );
 
-		const FVector launchDir = m_arrowInstance->GetActorRotation().Vector();
-		m_arrowInstance->InitVelocity( launchDir );
 		m_arrowInstance->DetachItem();
+		const FVector launchDir = m_arrowInstance->GetActorRotation().Vector();
+		m_arrowInstance->InitVelocity( launchDir );		
 	}
 }
 
 void ABow::Cancel()
 {
+	if (!m_arrowInstance)
+		return;
+	
+	m_arrowInstance->DetachItem();
 	m_arrowInstance->Destroy();
 	UE_LOG( LogTemp, Warning, TEXT( "Cancel shoot !" ) );
 }

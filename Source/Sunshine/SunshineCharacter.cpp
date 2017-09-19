@@ -374,7 +374,7 @@ void ASunshineCharacter::SkillFourReleased()
 	FinishSkill( m_skillFour );
 }
 
-void ASunshineCharacter::StartSkill( ASkillBase* skill, int index )
+void ASunshineCharacter::StartSkill( ASkillBase* skill, const int index )
 {
 	if ( m_bIsUsingSkill )
 		return;
@@ -395,5 +395,17 @@ void ASunshineCharacter::FinishSkill( ASkillBase* skill )
 	m_bIsUsingSkill = false;
 	
 	UpdateWalkSpeed();
+}
+
+ASkillBase*	ASunshineCharacter::GetSkill (const int index) const
+{
+	switch (index)
+	{
+		case 0 : return m_skillOne;
+		case 1 : return m_skillTwo;
+		case 2 : return m_skillThree;
+		case 3 : return m_skillFour;
+		default: return nullptr;
+	}
 }
 #pragma endregion

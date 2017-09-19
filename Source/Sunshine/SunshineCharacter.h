@@ -327,7 +327,7 @@ protected:
 	 * \brief Starts the skill
 	 * \param skill _IN_ The skill to call Start() on
 	 */
-	void StartSkill( ASkillBase* skill, int index );
+	void StartSkill( ASkillBase* skill, const int index );
 
 	/**
 	 * \brief Finishes the skill
@@ -350,7 +350,11 @@ private:
 #pragma endregion
 
 public:
-	/** Returns CameraBoom subobject **/
+
+	UFUNCTION(BlueprintCallable, Category = "Skills")
+	ASkillBase*	GetSkill (const int index) const;
+
+	/** Returns Socket Name **/
 	FORCEINLINE FString GetShootSocket() const { return m_socketName; }
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
