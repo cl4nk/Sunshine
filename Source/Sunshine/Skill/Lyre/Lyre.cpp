@@ -49,13 +49,13 @@ void ALyre::Init( ASunshineCharacter* owner )
 
 	const int32 num = m_chartsList.Num();
 	if ( num == 0 )
-		UE_LOG( LogTemp, Error, TEXT( "Charts list is empty !" ) );
+	UE_LOG( LogTemp, Error, TEXT( "Charts list is empty !" ) );
 
 	// Create new InputCmoponent to manage this class inputs
 	InputComponent = NewObject<UInputComponent>();
 
 	// if created
-	if (InputComponent)
+	if ( InputComponent )
 	{
 		// register the InputComponent to the world
 		InputComponent->RegisterComponent();
@@ -68,13 +68,13 @@ void ALyre::Init( ASunshineCharacter* owner )
 		InputComponent->BindAction( "SkillUltimate", IE_Pressed, this, &ALyre::ClickOnNote<ENote::N_Mi> );
 	}
 	else
-		UE_LOG( LogTemp, Error, TEXT( "InputComponent is nullptr !" ) );
+	UE_LOG( LogTemp, Error, TEXT( "InputComponent is nullptr !" ) );
 }
 
 void ALyre::SelectPrevChart()
 {
 	--m_currentChartIdx;
-	
+
 	if ( m_currentChartIdx < 0 )
 		m_currentChartIdx = m_chartsList.Num() - 1;
 }
@@ -102,7 +102,7 @@ void ALyre::OnActivationStart_Implementation()
 	{
 		UE_LOG( LogTemp, Error, TEXT( "Charts list is empty !" ) );
 		return;
-	}	
+	}
 
 	m_skillState = StartPlaying;
 	SetActorTickEnabled( true );
@@ -128,7 +128,7 @@ void ALyre::GetNextNote()
 		UE_LOG( LogTemp, Error, TEXT( "GetNextNote() - m_activeChart == nullptr" ) );
 		return;
 	}
-	
+
 	m_nextNote = m_activeChart->GetNoteAt( m_currentNoteIdx );
 	m_nextTimerBeforeNote = m_activeChart->GetTimerBeforeNoteAt( m_currentNoteIdx );
 }
@@ -139,8 +139,8 @@ void ALyre::ClickOnNote()
 	UE_LOG( LogTemp, Warning, TEXT( "ClickOnNote() [%d]" ), (int8)TNote );
 
 	if ( TNote != m_nextNote
-		 || m_timeSinceLastNote < m_nextTimerBeforeNote - m_maxIntervalForOneNote
-		 || m_timeSinceLastNote > m_nextTimerBeforeNote + m_maxIntervalForOneNote )
+		|| m_timeSinceLastNote < m_nextTimerBeforeNote - m_maxIntervalForOneNote
+		|| m_timeSinceLastNote > m_nextTimerBeforeNote + m_maxIntervalForOneNote )
 	{
 		OnFailedPlaying();
 		return;
@@ -167,22 +167,18 @@ void ALyre::TickWaiting()
 void ALyre::TickStartPlaying()
 {
 	UE_LOG( LogTemp, Warning, TEXT( "TickStartPlaying()" ) );
-	
+
 	m_currentNoteIdx = 0;
 	m_timeSinceLastNote = 0;
 
-	// TODO: not opti
+	m_activeChart = m_chartsList[m_currentChartIdx].GetDefaultObject();
+	if ( m_activeChart == nullptr )
 	{
-		m_activeChart = m_chartsList[m_currentChartIdx].GetDefaultObject();
-		if ( m_activeChart == nullptr )
-		{
-			UE_LOG( LogTemp, Error, TEXT( "TickStartPlaying() -- Spawned failed" ) );
-			return;
-		}
-		//m_activeChart->RegisterComponent();
+		UE_LOG( LogTemp, Error, TEXT( "TickStartPlaying() -- Spawned failed" ) );
+		return;
 	}
 
-	m_totalNotesCount =  m_activeChart->GetNoteCount();
+	m_totalNotesCount = m_activeChart->GetNoteCount();
 
 	EnableInput( Cast<APlayerController>( m_owner->GetController() ) );
 
@@ -196,7 +192,7 @@ void ALyre::TickPlaying( float deltaTime )
 	m_timeSinceLastNote += deltaTime;
 
 	UE_LOG( LogTemp, Warning, TEXT( "TickPlaying() - AVANT CLIC [%f]" ),
-			m_nextTimerBeforeNote - m_timeSinceLastNote );
+		m_nextTimerBeforeNote - m_timeSinceLastNote );
 
 	if ( m_timeSinceLastNote > m_nextTimerBeforeNote + m_maxIntervalForOneNote )
 		OnFailedPlaying();

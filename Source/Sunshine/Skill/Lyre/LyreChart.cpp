@@ -12,15 +12,7 @@ ULyreChart::ULyreChart()
 
 int ULyreChart::GetNoteCount() const
 {
-	const int32 noteCount = m_listNotes.Num();
-
-	if ( noteCount != m_listTimers.Num() )
-	{
-		UE_LOG( LogTemp, Error, TEXT( "Note and Timer haven't got the same amout of values !" ) );
-		return -1;
-	}
-
-	return noteCount;
+	return m_listNotes.Num();
 }
 
 ENote ULyreChart::GetNoteAt( const int noteIndex ) const
@@ -31,24 +23,27 @@ ENote ULyreChart::GetNoteAt( const int noteIndex ) const
 		return ENote::N_NONE;
 	}
 
-	return m_listNotes[noteIndex];
+	return m_listNotes[noteIndex].m_note;
 }
 
 float ULyreChart::GetTimerBeforeNoteAt( const int noteIndex ) const
 {
-	if ( noteIndex < 0 || noteIndex >= m_listTimers.Num() )
+	if ( noteIndex < 0 || noteIndex >= m_listNotes.Num() )
 	{
 		UE_LOG( LogTemp, Error, TEXT( "GetTimerBeforeNoteAt(%d) - bad noteIndex" ), noteIndex );
 		return -1.f;
 	}
 	
-	return m_listTimers[noteIndex];
+	return m_listNotes[noteIndex].m_timer;
 }
 
 void ULyreChart::AddNote( const float timer, const ENote note )
 {
 	UE_LOG( LogTemp, Warning, TEXT( "AddNote(%f, %d)" ), timer, (int8)note );
 
-	m_listTimers.Add( timer );
-	m_listNotes.Add( note );
+	FApproachNote approachNote;
+	approachNote.m_timer = timer;
+	approachNote.m_note = note;
+
+	m_listNotes.Add( approachNote );
 }

@@ -20,6 +20,19 @@ enum class ENote : uint8
 	N_NONE	UMETA( Hidden )
 };
 
+USTRUCT(BlueprintType)
+struct FApproachNote
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float m_timer;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	ENote m_note;
+};
+
 UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class SUNSHINE_API ULyreChart : public UActorComponent
 {
@@ -46,8 +59,5 @@ protected:
 	void AddNote( const float timer, const ENote note );
 
 	UPROPERTY( Category = "Notes", EditDefaultsOnly, BlueprintReadOnly )
-	TArray<ENote>	m_listNotes;
-
-	UPROPERTY( Category = "Notes", EditDefaultsOnly, BlueprintReadOnly )
-	TArray<float>	m_listTimers;
+	TArray<FApproachNote> m_listNotes;
 };
