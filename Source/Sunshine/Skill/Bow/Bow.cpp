@@ -37,6 +37,7 @@ void ABow::Bend()
 	if ( m_arrowInstance != nullptr )
 	{
 		UE_LOG( LogTemp, Warning, TEXT( "Arrow has been instantiated !" ) );
+		m_arrowInstance->AttachItemTo(m_owner->GetMesh(), FName(*m_owner->GetShootSocket()));
 	}
 	else
 	{
@@ -50,13 +51,18 @@ void ABow::Shoot()
 	{
 		UE_LOG( LogTemp, Warning, TEXT( "Shoot arrow !" ) );
 
+		m_arrowInstance->DetachItem();
 		const FVector launchDir = m_arrowInstance->GetActorRotation().Vector();
-		m_arrowInstance->InitVelocity( launchDir );
+		m_arrowInstance->InitVelocity( launchDir );		
 	}
 }
 
 void ABow::Cancel()
 {
+	if (!m_arrowInstance)
+		return;
+	
+	m_arrowInstance->DetachItem();
 	m_arrowInstance->Destroy();
 	UE_LOG( LogTemp, Warning, TEXT( "Cancel shoot !" ) );
 }
