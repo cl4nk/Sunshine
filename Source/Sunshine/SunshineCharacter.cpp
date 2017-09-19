@@ -29,6 +29,9 @@ ASunshineCharacter::ASunshineCharacter()
 	GetCharacterMovement()->JumpZVelocity = 600.f;
 	GetCharacterMovement()->AirControl = 0.2f;
 	
+	//Enable the crouch functionality
+	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
+	
 	GetCharacterMovement()->MaxWalkSpeed = m_walkSpeed;
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
@@ -275,12 +278,14 @@ void ASunshineCharacter::OnJumpReleased()
 void ASunshineCharacter::OnCrouchPressed()
 {
 	CrouchPressed = true;
+	Crouch();
 	UpdateWalkSpeed();
 }
 
 void ASunshineCharacter::OnCrouchReleased()
 {
-	CrouchPressed = false;	
+	CrouchPressed = false;
+	UnCrouch();
 	UpdateWalkSpeed();
 }
 
