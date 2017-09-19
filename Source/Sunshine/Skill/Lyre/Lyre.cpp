@@ -47,6 +47,10 @@ void ALyre::Init( ASunshineCharacter* owner )
 
 	m_skillState = Waiting;
 
+	const int32 num = m_chartsList.Num();
+	if ( num == 0 )
+		UE_LOG( LogTemp, Error, TEXT( "Charts list is empty !" ) );
+
 	// Create new InputCmoponent to manage this class inputs
 	InputComponent = NewObject<UInputComponent>();
 
@@ -64,9 +68,7 @@ void ALyre::Init( ASunshineCharacter* owner )
 		InputComponent->BindAction( "SkillUltimate", IE_Pressed, this, &ALyre::ClickOnNote<ENote::N_Mi> );
 	}
 	else
-	{
 		UE_LOG( LogTemp, Error, TEXT( "InputComponent is nullptr !" ) );
-	}
 }
 
 void ALyre::SelectPrevChart()
@@ -95,7 +97,13 @@ void ALyre::OnActivationStart_Implementation()
 		UE_LOG( LogTemp, Error, TEXT( "Owner is nullptr !" ) );
 		return;
 	}
-	
+
+	if ( m_chartsList.Num() == 0 )
+	{
+		UE_LOG( LogTemp, Error, TEXT( "Charts list is empty !" ) );
+		return;
+	}	
+
 	m_skillState = StartPlaying;
 	SetActorTickEnabled( true );
 }
@@ -115,6 +123,12 @@ void ALyre::OnFailedPlaying_Implementation()
 
 void ALyre::GetNextNote()
 {
+	if ( m_activeChart == nullptr )
+	{
+		UE_LOG( LogTemp, Error, TEXT( "GetNextNote() - m_activeChart == nullptr" ) );
+		return;
+	}
+	
 	m_nextNote = m_activeChart->GetNoteAt( m_currentNoteIdx );
 	m_nextTimerBeforeNote = m_activeChart->GetTimerBeforeNoteAt( m_currentNoteIdx );
 }
@@ -153,21 +167,36 @@ void ALyre::TickWaiting()
 void ALyre::TickStartPlaying()
 {
 	UE_LOG( LogTemp, Warning, TEXT( "TickStartPlaying()" ) );
-
-	//m_activeChart = m_chartsList[m_currentChartIdx].GetDefaultObject();
-	//m_totalNotesCount =  m_activeChart->GetNoteCount();
+	
 	m_currentNoteIdx = 0;
 	m_timeSinceLastNote = 0;
 
+	// TODO: not opti
+	{
+		m_activeChart = m_chartsList[m_currentChartIdx].GetDefaultObject();
+		if ( m_activeChart == nullptr )
+		{
+			UE_LOG( LogTemp, Error, TEXT( "TickStartPlaying() -- Spawned failed" ) );
+			return;
+		}
+		//m_activeChart->RegisterComponent();
+	}
+
+	m_totalNotesCount =  m_activeChart->GetNoteCount();
+
 	EnableInput( Cast<APlayerController>( m_owner->GetController() ) );
 
-	//GetNextNote();
+	GetNextNote();
+
+	m_skillState = Playing;
 }
 
 void ALyre::TickPlaying( float deltaTime )
 {
-	return;
 	m_timeSinceLastNote += deltaTime;
+
+	UE_LOG( LogTemp, Warning, TEXT( "TickPlaying() - AVANT CLIC [%f]" ),
+			m_nextTimerBeforeNote - m_timeSinceLastNote );
 
 	if ( m_timeSinceLastNote > m_nextTimerBeforeNote + m_maxIntervalForOneNote )
 		OnFailedPlaying();
@@ -191,6 +220,7 @@ void ALyre::TickStopPlaying()
 {
 	UE_LOG( LogTemp, Warning, TEXT( "TickStopPlaying()" ) );
 
+	m_activeChart->DestroyComponent();
 	m_activeChart = nullptr;
 	DisableInput( Cast<APlayerController>( m_owner->GetController() ) );
 	m_skillState = Waiting;

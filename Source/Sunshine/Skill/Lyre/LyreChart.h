@@ -20,7 +20,7 @@ enum class ENote : uint8
 	N_NONE	UMETA( Hidden )
 };
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class SUNSHINE_API ULyreChart : public UActorComponent
 {
 	GENERATED_BODY()
@@ -37,13 +37,17 @@ public:
 	UFUNCTION()
 	float GetTimerBeforeNoteAt( const int noteIndex ) const;
 
+	// TODO: not possible for GD because UActorComponent does not support BlueprintImplementableEvent
+	//UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	//void InitChart();
+
 protected:
 	UFUNCTION( Category = "Notes", BlueprintCallable )
 	void AddNote( const float timer, const ENote note );
 
-	UPROPERTY( Category = "Notes", VisibleAnywhere, BlueprintReadOnly )
+	UPROPERTY( Category = "Notes", EditDefaultsOnly, BlueprintReadOnly )
 	TArray<ENote>	m_listNotes;
 
-	UPROPERTY( Category = "Notes", VisibleAnywhere, BlueprintReadOnly )
+	UPROPERTY( Category = "Notes", EditDefaultsOnly, BlueprintReadOnly )
 	TArray<float>	m_listTimers;
 };

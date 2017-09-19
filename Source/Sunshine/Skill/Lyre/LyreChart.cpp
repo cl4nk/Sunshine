@@ -25,9 +25,9 @@ int ULyreChart::GetNoteCount() const
 
 ENote ULyreChart::GetNoteAt( const int noteIndex ) const
 {
-	if ( noteIndex < 0 || noteIndex > m_listNotes.Num() )
+	if ( noteIndex < 0 || noteIndex >= m_listNotes.Num() )
 	{
-		UE_LOG( LogTemp, Warning, TEXT( "" ) );
+		UE_LOG( LogTemp, Error, TEXT( "GetNoteAt(%d) - bad noteIndex" ), noteIndex );
 		return ENote::N_NONE;
 	}
 
@@ -36,17 +36,19 @@ ENote ULyreChart::GetNoteAt( const int noteIndex ) const
 
 float ULyreChart::GetTimerBeforeNoteAt( const int noteIndex ) const
 {
-	if ( noteIndex < 0 || noteIndex > m_listTimers.Num() )
+	if ( noteIndex < 0 || noteIndex >= m_listTimers.Num() )
 	{
-		UE_LOG( LogTemp, Warning, TEXT( "" ) );
+		UE_LOG( LogTemp, Error, TEXT( "GetTimerBeforeNoteAt(%d) - bad noteIndex" ), noteIndex );
 		return -1.f;
 	}
-
+	
 	return m_listTimers[noteIndex];
 }
 
 void ULyreChart::AddNote( const float timer, const ENote note )
 {
+	UE_LOG( LogTemp, Warning, TEXT( "AddNote(%f, %d)" ), timer, (int8)note );
+
 	m_listTimers.Add( timer );
 	m_listNotes.Add( note );
 }
