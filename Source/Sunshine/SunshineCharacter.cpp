@@ -67,6 +67,8 @@ void ASunshineCharacter::BeginPlay()
 	else
 		UE_LOG( LogTemp, Error, TEXT("ASunshineCharacter::BeginPlay() - CameraBoom and/or FollowCamera is nullptr") );
 
+	//ChangeControllerMode( ESunshineCharacterControllerMode::Normal );
+
 	m_currentMana = m_maxMana;
 
 	if ( m_defaultSkillOne == nullptr )

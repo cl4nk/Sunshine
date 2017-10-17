@@ -69,7 +69,7 @@ protected:
 	float CameraBaseFOV;
 
 	/**
-	 * \brief Base Socket Offeset of the the camera
+	 * \brief Base Socket Offset of the the camera
 	 * \note Set in BeginPlay() using Blueprint values
 	 */
 	UPROPERTY( Category = "SunshineCharacter|Camera|Base", VisibleAnywhere, BlueprintReadOnly, Transient )
