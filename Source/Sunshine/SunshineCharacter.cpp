@@ -54,6 +54,19 @@ void ASunshineCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if ( CameraBoom && FollowCamera )
+	{
+		CameraBaseDistance = CameraBoom->TargetArmLength;
+		CameraBaseOffset = CameraBoom->SocketOffset;
+		CameraBaseFOV = FollowCamera->FieldOfView;
+
+		CameraTargetDistance = CameraBaseDistance;
+		CameraTargetOffset = CameraBaseOffset;
+		CameraTargetFOV = CameraBaseFOV;
+	}
+	else
+		UE_LOG( LogTemp, Error, TEXT("ASunshineCharacter::BeginPlay() - CameraBoom and/or FollowCamera is nullptr") );
+
 	m_currentMana = m_maxMana;
 
 	if ( m_defaultSkillOne == nullptr )
@@ -97,6 +110,59 @@ void ASunshineCharacter::BeginPlay()
 	}
 
 }
+
+void ASunshineCharacter::Tick( float deltaTime )
+{
+	Super::Tick( deltaTime );
+
+	TickUpdateCamera( deltaTime );
+}
+
+#pragma region Camera
+void ASunshineCharacter::TickUpdateCamera( const float deltaTime ) const
+{
+	if ( CameraBoom && CameraBoom->TargetArmLength != CameraTargetDistance )
+	{
+		CameraBoom->TargetArmLength = FMath::Lerp( CameraBoom->TargetArmLength, CameraTargetDistance, deltaTime );
+	}
+	if ( CameraBoom && CameraBoom->SocketOffset != CameraTargetOffset )
+	{
+		CameraBoom->SocketOffset = FMath::Lerp( CameraBoom->SocketOffset, CameraTargetOffset, deltaTime );
+	}
+	if ( FollowCamera && FollowCamera->FieldOfView != CameraTargetFOV )
+	{
+		FollowCamera->FieldOfView = FMath::Lerp( FollowCamera->FieldOfView, CameraTargetFOV, deltaTime );
+	}
+}
+
+void ASunshineCharacter::ChangeControllerMode( const ESunshineCharacterControllerMode newCameraMode )
+{
+	switch ( newCameraMode )
+	{
+		case ESunshineCharacterControllerMode::Normal:
+		{
+			CameraTargetDistance = CameraBaseDistance;
+			CameraTargetOffset = CameraBaseOffset;
+			CameraTargetFOV = CameraBaseFOV;
+
+			GetCharacterMovement()->bOrientRotationToMovement = true;
+			break;
+		}
+		case ESunshineCharacterControllerMode::Aiming:
+		{
+			CameraTargetDistance = CameraAimDistance;
+			CameraTargetOffset = CameraAimOffset;
+			CameraTargetFOV = CameraAimFOV;
+
+			GetCharacterMovement()->bOrientRotationToMovement = false;
+			break;
+		}
+		case ESunshineCharacterControllerMode::Unknown:
+		default:
+			break;
+	}
+}
+#pragma endregion
 
 //////////////////////////////////////////////////////////////////////////
 // Input

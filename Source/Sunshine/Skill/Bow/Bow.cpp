@@ -3,6 +3,8 @@
 #include "Bow.h"
 #include "Engine/World.h"
 #include "SunshineCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
 #pragma region Unreal Engine functions
 void ABow::BeginPlay()
@@ -26,6 +28,8 @@ void ABow::Init( ASunshineCharacter* owner )
 
 void ABow::Bend()
 {
+	m_owner->ChangeControllerMode( ESunshineCharacterControllerMode::Aiming );
+
 	FActorSpawnParameters spawnInfo;
 	spawnInfo.Owner = this;
 	spawnInfo.Instigator = Instigator;
@@ -37,7 +41,7 @@ void ABow::Bend()
 	if ( m_arrowInstance != nullptr )
 	{
 		UE_LOG( LogTemp, Warning, TEXT( "Arrow has been instantiated !" ) );
-		m_arrowInstance->AttachItemTo(m_owner->GetMesh(), FName(*m_owner->GetShootSocket()));
+		m_arrowInstance->AttachItemTo( m_owner->GetMesh(), FName( *m_owner->GetShootSocket() ) );
 	}
 	else
 	{
@@ -47,6 +51,8 @@ void ABow::Bend()
 
 void ABow::Shoot()
 {
+	m_owner->ChangeControllerMode( ESunshineCharacterControllerMode::Normal );
+
 	if ( m_arrowInstance )
 	{
 		UE_LOG( LogTemp, Warning, TEXT( "Shoot arrow !" ) );
@@ -59,6 +65,8 @@ void ABow::Shoot()
 
 void ABow::Cancel()
 {
+	m_owner->ChangeControllerMode( ESunshineCharacterControllerMode::Normal );
+
 	if (!m_arrowInstance)
 		return;
 	
