@@ -3,6 +3,9 @@
 #include "Bow.h"
 #include "Engine/World.h"
 #include "SunshineCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 
 #pragma region Unreal Engine functions
 void ABow::BeginPlay()
@@ -26,6 +29,8 @@ void ABow::Init( ASunshineCharacter* owner )
 
 void ABow::Bend()
 {
+	m_owner->ChangeControllerMode( ESunshineCharacterControllerMode::Aiming );
+
 	FActorSpawnParameters spawnInfo;
 	spawnInfo.Owner = this;
 	spawnInfo.Instigator = Instigator;
@@ -37,7 +42,7 @@ void ABow::Bend()
 	if ( m_arrowInstance != nullptr )
 	{
 		UE_LOG( LogTemp, Warning, TEXT( "Arrow has been instantiated !" ) );
-		m_arrowInstance->AttachItemTo(m_owner->GetMesh(), FName(*m_owner->GetShootSocket()));
+		m_arrowInstance->AttachItemTo( m_owner->GetMesh(), FName( *m_owner->GetShootSocket() ) );
 	}
 	else
 	{
@@ -47,22 +52,51 @@ void ABow::Bend()
 
 void ABow::Shoot()
 {
+	m_owner->ChangeControllerMode( ESunshineCharacterControllerMode::Normal );
+
 	if ( m_arrowInstance )
 	{
 		UE_LOG( LogTemp, Warning, TEXT( "Shoot arrow !" ) );
 
+		const FVector start = m_arrowInstance->GetActorLocation();
+		const FVector end = GetAimedLocation();
+		FVector direction = end - start;
+
 		m_arrowInstance->DetachItem();
-		const FVector launchDir = m_arrowInstance->GetActorRotation().Vector();
-		m_arrowInstance->InitVelocity( launchDir );		
+		m_arrowInstance->InitVelocity( direction.GetSafeNormal() );
 	}
 }
 
 void ABow::Cancel()
 {
+	m_owner->ChangeControllerMode( ESunshineCharacterControllerMode::Normal );
+
 	if (!m_arrowInstance)
 		return;
 	
 	m_arrowInstance->DetachItem();
 	m_arrowInstance->Destroy();
 	UE_LOG( LogTemp, Warning, TEXT( "Cancel shoot !" ) );
+}
+
+FVector ABow::GetAimedLocation() const
+{
+	const FTransform cameraTransform = m_owner->GetFollowCamera()->GetComponentTransform();		
+	const FVector lookLocation = cameraTransform.GetLocation();
+	const FVector lookDirection = cameraTransform.GetRotation().GetForwardVector();
+
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor( m_owner );
+	CollisionParams.bTraceComplex = true;
+	CollisionParams.bReturnPhysicalMaterial = true;
+
+	UWorld* world = GetWorld();
+	check( world );
+
+	FHitResult hitResult;
+	if ( world->LineTraceSingleByChannel( hitResult, lookLocation, lookLocation + lookDirection * MaxAimedDistance, ECC_Visibility, CollisionParams ) )
+	{
+		return hitResult.ImpactPoint;
+	}
+	return lookLocation + lookDirection * MaxAimedDistance;
 }

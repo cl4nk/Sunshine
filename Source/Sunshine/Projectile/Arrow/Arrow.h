@@ -48,7 +48,7 @@ protected:
 
 							   
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float m_powerVelocity = 2000.f;
+	float m_powerVelocity = 5000.f;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	UPrimitiveComponent* m_rootPrimitiveComponent = nullptr;
