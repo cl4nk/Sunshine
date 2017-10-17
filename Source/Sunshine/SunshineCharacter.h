@@ -93,7 +93,7 @@ protected:
 	 * \brief Socket Offeset of the the camera when aiming
 	 */
 	UPROPERTY( Category = "SunshineCharacter|Camera|Aim", EditDefaultsOnly, BlueprintReadOnly )
-	FVector CameraAimOffset = FVector( 0.f, 20.f, 30.f );
+	FVector CameraAimOffset = FVector( 0.f, 25.f, 35.f );
 	#pragma endregion
 
 	#pragma region Base

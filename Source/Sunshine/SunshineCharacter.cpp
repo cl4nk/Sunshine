@@ -146,6 +146,8 @@ void ASunshineCharacter::ChangeControllerMode( const ESunshineCharacterControlle
 			CameraTargetFOV = CameraBaseFOV;
 
 			GetCharacterMovement()->bOrientRotationToMovement = true;
+			bUseControllerRotationYaw = false;
+
 			break;
 		}
 		case ESunshineCharacterControllerMode::Aiming:
@@ -155,6 +157,10 @@ void ASunshineCharacter::ChangeControllerMode( const ESunshineCharacterControlle
 			CameraTargetFOV = CameraAimFOV;
 
 			GetCharacterMovement()->bOrientRotationToMovement = false;
+			bUseControllerRotationYaw = true;
+			
+			// TODO: Try to lerp this, no tp
+			SetActorRotation( GetCameraBoom()->GetComponentRotation() );
 			break;
 		}
 		case ESunshineCharacterControllerMode::Unknown:
