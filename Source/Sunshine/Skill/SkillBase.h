@@ -33,7 +33,7 @@ public:
 	/**
 	 * \brief Get the Mana cost of the Skill
 	 */
-	uint32_t GetManaCost() const;
+	int GetManaCost() const;
 
 	/**
 	 * \brief Get the Noise value made by the skill usage
@@ -46,9 +46,19 @@ public:
 	void Finish();
 
 protected:
-	uint32_t m_manaCost = 0;
-	float m_noiseValue = 0.0f;
-	bool m_bIsActive = false;
+	/**
+	 * \brief Mana cost of the skill ON CALL
+	 */
+	UPROPERTY( Category = "Skill|Stats", EditDefaultsOnly, BlueprintReadOnly )
+	int		m_manaCost = 0;
+
+	/**
+	 * \brief Noise value of the skill ON CALL
+	 */
+	UPROPERTY( Category = "Skill|Stats", EditDefaultsOnly, BlueprintReadOnly )
+	float	m_noiseValue = 0.0f;
+
+	bool	m_bIsActive = false;
 	ASunshineCharacter* m_owner = nullptr;
 
 #pragma region Events

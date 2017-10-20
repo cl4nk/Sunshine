@@ -453,6 +453,11 @@ void ASunshineCharacter::StartSkill( ASkillBase* skill, const int index )
 	if ( m_bIsUsingSkill )
 		return;
 
+	const int manaCost = skill->GetManaCost();
+	if ( manaCost > m_currentMana )
+		return;
+	m_currentMana -= manaCost;
+
 	m_bIsUsingSkill = true;
 	m_skillUsed = index;
 
