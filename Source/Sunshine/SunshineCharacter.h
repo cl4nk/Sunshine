@@ -9,6 +9,15 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE( FOnAction );
 
+UENUM(BlueprintType)
+enum class ESunshineCharacterControllerMode : uint8
+{
+	Normal,
+	Aiming,
+
+	Unknown
+};
+
 UCLASS(config=Game)
 class ASunshineCharacter : public ACharacter
 {
@@ -26,16 +35,107 @@ class ASunshineCharacter : public ACharacter
 	class UPawnNoiseEmitterComponent* NoiseEmitter;
 
 public:
-	ASunshineCharacter();	
+	ASunshineCharacter();
 
+#pragma region Overriden from ACharacter
+protected:
+	virtual void BeginPlay() override;
+	virtual void Tick( float deltaTime ) override;
+#pragma endregion
+
+#pragma region Camera
+protected:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Camera)
+	UPROPERTY( Category = "SunshineCharacter|Camera", EditAnywhere, BlueprintReadOnly )
 	float BaseTurnRate = 45.f;
 
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Camera)
+	UPROPERTY( Category = "SunshineCharacter|Camera", EditAnywhere, BlueprintReadOnly )
 	float BaseLookUpRate = 45.f;
 
+	#pragma region Base
+	/**
+	 * \brief Base distance of the camera from the character
+	 * \note Set in BeginPlay() using Blueprint values
+	 */
+	UPROPERTY( Category = "SunshineCharacter|Camera|Base", VisibleAnywhere, BlueprintReadOnly, Transient )
+	float CameraBaseDistance;
+
+	/**
+	 * \brief Base FOV of the camera
+	 * \note Set in BeginPlay() using Blueprint values
+	 */
+	UPROPERTY( Category = "SunshineCharacter|Camera|Base", VisibleAnywhere, BlueprintReadOnly, Transient )
+	float CameraBaseFOV;
+
+	/**
+	 * \brief Base Socket Offset of the the camera
+	 * \note Set in BeginPlay() using Blueprint values
+	 */
+	UPROPERTY( Category = "SunshineCharacter|Camera|Base", VisibleAnywhere, BlueprintReadOnly, Transient )
+	FVector CameraBaseOffset;
+	#pragma endregion
+
+	#pragma region Aim
+	/**
+	 * \brief Distance of the camera from the character when aiming
+	 */
+	UPROPERTY( Category = "SunshineCharacter|Camera|Aim", EditDefaultsOnly, BlueprintReadOnly )
+	float CameraAimDistance = 100.f;
+
+	/**
+	 * \brief FOV of the camera when aiming
+	 */
+	UPROPERTY( Category = "SunshineCharacter|Camera|Aim", EditDefaultsOnly, BlueprintReadOnly )
+	float CameraAimFOV = 75.f;
+
+	/**
+	 * \brief Socket Offeset of the the camera when aiming
+	 */
+	UPROPERTY( Category = "SunshineCharacter|Camera|Aim", EditDefaultsOnly, BlueprintReadOnly )
+	FVector CameraAimOffset = FVector( 0.f, 25.f, 35.f );
+	#pragma endregion
+
+	#pragma region Base
+	/**
+	 * \brief Target distance of the camera from the character on moment
+	 */
+	UPROPERTY( Category = "SunshineCharacter|Camera|Target", VisibleAnywhere, BlueprintReadOnly, Transient )
+	float CameraTargetDistance;
+
+	/**
+	 * \brief Target FOV of the camera on moment
+	 */
+	UPROPERTY( Category = "SunshineCharacter|Camera|Target", VisibleAnywhere, BlueprintReadOnly, Transient )
+	float CameraTargetFOV;
+
+	/**
+	 * \brief Target Socket Offeset of the the camera on moment
+	 */
+	UPROPERTY( Category = "SunshineCharacter|Camera|Target", VisibleAnywhere, BlueprintReadOnly, Transient )
+	FVector CameraTargetOffset;
+	#pragma endregion
+
+	/**
+	 * \brief The current Camera Mode of the character
+	 */
+	ESunshineCharacterControllerMode CurrentCameraMode = ESunshineCharacterControllerMode::Unknown;
+
+	/**
+	 * \brief Updates camera towards targeted properties
+	 * \param deltaTime _IN_ Time since last frame
+	 */
+	void TickUpdateCamera( const float deltaTime ) const;
+
+public:
+	/**
+	 * \brief Changes the camera mode of the character
+	 * \param newCameraMode _IN_ The camera mode to be set
+	 */
+	void ChangeControllerMode( const ESunshineCharacterControllerMode newCameraMode );
+#pragma endregion
+
+public:
 	/**
 	 * \brief Event called when the character moves after an input
 	 */
@@ -43,8 +143,6 @@ public:
 	FOnAction OnInputMovement;
 
 protected:
-	virtual void BeginPlay() override;
-
 	UPROPERTY(Category = "CharacterMovement", VisibleAnywhere, BlueprintReadOnly)
 	bool JogPressed = false;
 
@@ -321,7 +419,7 @@ protected:
 	int m_skillUsed = -1;
 	
 	UPROPERTY(Category = "Skills", EditAnywhere)
-	FString m_socketName = "RightHandSocket";
+	FString m_socketName = "LeftHandSocket";
 
 	/**
 	 * \brief Starts the skill

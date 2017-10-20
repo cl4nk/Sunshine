@@ -33,6 +33,11 @@ protected:
 	void Shoot();
 	void Cancel();
 
+	FVector GetAimedLocation() const;
+
+	UPROPERTY( EditDefaultsOnly, BlueprintReadOnly )
+	float MaxAimedDistance = 10000.f;
+
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	TSubclassOf<AArrow> m_arrowType;
 

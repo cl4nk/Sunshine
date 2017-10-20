@@ -60,24 +60,24 @@ void AArrow::OnOverlapEndBase( UPrimitiveComponent* overlappedComp, AActor* othe
 	}
 }
 
-void	AArrow::AttachItemTo(USkeletalMeshComponent *meshRoot, FName socket)
+void AArrow::AttachItemTo( USkeletalMeshComponent* meshRoot, FName socket )
 {
-	AttachToComponent(meshRoot, FAttachmentTransformRules::SnapToTargetNotIncludingScale, socket);
-
-	SetActorRelativeLocation(FVector::ZeroVector);
-	SetActorRelativeRotation(FRotator::ZeroRotator);
+	m_rootPrimitiveComponent->SetSimulatePhysics( false );
+	m_rootPrimitiveComponent->SetCollisionEnabled( ECollisionEnabled::Type::NoCollision );
 	
-	m_rootPrimitiveComponent->SetSimulatePhysics(false);
-	m_rootPrimitiveComponent->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
-		
+	AttachToComponent( Cast<USceneComponent>( meshRoot ), FAttachmentTransformRules::SnapToTargetNotIncludingScale, socket );
+
+	SetActorRelativeLocation( FVector::ZeroVector );
+	SetActorRelativeRotation( FRotator::ZeroRotator );
 }
 
-void	AArrow::DetachItem()
+void AArrow::DetachItem()
 {
-	if (m_rootPrimitiveComponent)
+	DetachFromActor( FDetachmentTransformRules::KeepWorldTransform );
+
+	if ( m_rootPrimitiveComponent )
 	{
-		m_rootPrimitiveComponent->SetSimulatePhysics(true);
-		m_rootPrimitiveComponent->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+		m_rootPrimitiveComponent->SetSimulatePhysics( true );
+		m_rootPrimitiveComponent->SetCollisionEnabled( ECollisionEnabled::Type::QueryAndPhysics );
 	}
-	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 }
