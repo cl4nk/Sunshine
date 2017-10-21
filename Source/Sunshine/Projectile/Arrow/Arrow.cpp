@@ -28,35 +28,52 @@ void AArrow::InitVelocity( FVector direction )
 }
 
 void AArrow::OnOverlapBegin( UPrimitiveComponent* overlappedComp, AActor* otherActor,
-								 UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep,
-								 const FHitResult& sweepResult )
+                             UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep,
+                             const FHitResult& sweepResult )
 {
 }
 
 void AArrow::OnOverlapEnd( UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp,
-							   int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult )
+                           int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult )
+{
+}
+
+void AArrow::OnHitComponent( UPrimitiveComponent* hitComponent, AActor* otherActor, UPrimitiveComponent* otherComponent,
+                             FVector normalImpulse, const FHitResult& hit )
 {
 }
 
 void AArrow::OnOverlapBeginBase( UPrimitiveComponent* overlappedComp, AActor* otherActor,
-									 UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep,
-									 const FHitResult& sweepResult )
+                                 UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep,
+                                 const FHitResult& sweepResult )
 {
 	// Other Actor is the actor that triggered the event. Check that is not ourself.  
-	if ( otherActor != nullptr && otherComp != nullptr && dynamic_cast<AArrow *>( otherActor ) != this )
+	if ( otherActor != nullptr && otherComp != nullptr && Cast<AArrow>( otherActor ) != this )
 	{
 		OnOverlapBegin( overlappedComp, otherActor, otherComp, otherBodyIndex, bFromSweep, sweepResult );
 	}
 }
 
 void AArrow::OnOverlapEndBase( UPrimitiveComponent* overlappedComp, AActor* otherActor,
-								   UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep,
-								   const FHitResult& sweepResult )
+                               UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep,
+                               const FHitResult& sweepResult )
 {
 	// Other Actor is the actor that triggered the event. Check that is not ourself.  
-	if ( otherActor != nullptr && otherComp != nullptr && dynamic_cast<AArrow *>( otherActor ) != this )
+	if ( otherActor != nullptr && otherComp != nullptr && Cast<AArrow>( otherActor ) != this )
 	{
 		OnOverlapEnd( overlappedComp, otherActor, otherComp, otherBodyIndex, bFromSweep, sweepResult );
+	}
+}
+
+void AArrow::OnHitComponentBase( UPrimitiveComponent* hitComponent, AActor* otherActor,
+                                 UPrimitiveComponent* otherComponent,
+                                 FVector normalImpulse, const FHitResult& hit )
+{
+	if ( otherActor != nullptr && Cast<AArrow>(otherActor) != this )
+	{
+		OnHitComponent( hitComponent, otherActor, otherComponent, normalImpulse, hit );
+		// TODO: not destroy, just stay fix
+		Destroy();
 	}
 }
 
@@ -80,4 +97,9 @@ void AArrow::DetachItem()
 		m_rootPrimitiveComponent->SetSimulatePhysics( true );
 		m_rootPrimitiveComponent->SetCollisionEnabled( ECollisionEnabled::Type::QueryAndPhysics );
 	}
+}
+
+void AArrow::SetSunshineCharacter( ASunshineCharacter* sunshineCharacter )
+{
+	m_sunshineCharacter = sunshineCharacter;
 }

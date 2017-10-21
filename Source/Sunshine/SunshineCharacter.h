@@ -93,7 +93,7 @@ protected:
 	 * \brief Socket Offeset of the the camera when aiming
 	 */
 	UPROPERTY( Category = "SunshineCharacter|Camera|Aim", EditDefaultsOnly, BlueprintReadOnly )
-	FVector CameraAimOffset = FVector( 0.f, 25.f, 35.f );
+	FVector CameraAimOffset = FVector( 0.f, 40.f, 35.f );
 	#pragma endregion
 
 	#pragma region Base
@@ -388,26 +388,37 @@ protected:
 	void SkillThreeReleased();
 	#pragma endregion
 	
-	#pragma region Skill Four
+	#pragma region Skill Weapon
 	UPROPERTY(Category = "Skills", EditDefaultsOnly, BlueprintReadWrite)
-	UClass*	m_defaultSkillFour = nullptr;
+	UClass*	m_defaultSkillWeapon = nullptr;
 
 	/**
-	 * \brief Fourth skill of the character
+	 * \brief "Fourth" skill of the character, the weapon skill
 	 */
 	UPROPERTY(Category = "Skills", VisibleAnywhere, BlueprintReadWrite)
-	ASkillBase* m_skillFour = nullptr;
+	ASkillBase* m_skillWeapon = nullptr;
 
 	/**
-	 * \brief Try to execute skill four
+	 * \brief Try to execute "weapon skill"
 	 */
-	void SkillFourPressed();
+	void SkillWeaponPressed();
 
 	/**
-	 * \brief Try to end skill one execution
+	 * \brief Try to end "weapon skill" execution
 	 */
-	void SkillFourReleased();
+	void SkillWeaponReleased();
+
+	/**
+	 * \brief Shoot the activated weapon skill
+	 */
+	void SkillShoot();
 	#pragma endregion
+
+	/**
+	 * \brief Changes multi skill of the character
+	 * \param rate _IN_ Rate of the axe, positive or negative
+	 */
+	virtual void ChangeMultiSkill( float rate );
 
 	/**
 	 * \brief Is a skill being used or not

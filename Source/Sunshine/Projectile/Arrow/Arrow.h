@@ -4,12 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "SunshineCharacter.h"
 #include "Arrow.generated.h"
 
 UCLASS()
 class SUNSHINE_API AArrow : public AActor
 {
-	GENERATED_BODY()
+GENERATED_BODY()
 	
 public:
 	// Sets default values for this actor's properties
@@ -31,6 +32,8 @@ public:
 	
 	void DetachItem();
 
+	void SetSunshineCharacter( ASunshineCharacter* sunshineCharacter );
+
 protected:
 	/**
 	 * \brief Function called when overlap with another object begins
@@ -46,14 +49,14 @@ protected:
 	virtual void OnOverlapEnd( UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp,
 	                           int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult );
 
-							   
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	float m_powerVelocity = 5000.f;
+	/**
+	 * \brief Function called when hiting another actor
+	 */
+	UFUNCTION( Category = "Collision", BlueprintCallable )
+	virtual void OnHitComponent( UPrimitiveComponent* hitComponent, AActor* otherActor,
+	                             UPrimitiveComponent* otherComponent,
+	                             FVector normalImpulse, const FHitResult& hit );
 
-	UPROPERTY( EditAnywhere, BlueprintReadWrite )
-	UPrimitiveComponent* m_rootPrimitiveComponent = nullptr;
-
-private:
 	/**
 	 * \brief Function called when overlap with another object begins
 	 * \note This private function will call OnOverlapBegin(), which is virtual and can be overriden
@@ -69,4 +72,21 @@ private:
 	UFUNCTION( Category = "Collision", BlueprintCallable )
 	void OnOverlapEndBase( UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp,
 	                       int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult );
+
+	/**
+	 * \brief Function called when hiting another actor
+	 * \note This private function will call OnHitComponent(), which is virtual and can be overriden
+	 */
+	UFUNCTION( Category = "Collision", BlueprintCallable )
+	void OnHitComponentBase( UPrimitiveComponent* hitComponent, AActor* otherActor, UPrimitiveComponent* otherComponent,
+	                         FVector normalImpulse, const FHitResult& hit );
+							   
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	float m_powerVelocity = 5000.f;
+
+	UPROPERTY( EditAnywhere, BlueprintReadWrite )
+	UPrimitiveComponent* m_rootPrimitiveComponent = nullptr;
+
+	UPROPERTY( VisibleAnywhere, BlueprintReadOnly )
+	ASunshineCharacter* m_sunshineCharacter = nullptr;
 };
