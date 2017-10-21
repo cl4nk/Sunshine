@@ -16,4 +16,6 @@ class SUNSHINE_API AShineCharacter : public ASunshineCharacter
 
 public:
 	virtual ~AShineCharacter() = default;
+
+	virtual void ChangeMultiSkill( float rate ) override;
 };

@@ -23,8 +23,8 @@ void ABowPlague::Tick( float deltaTime )
 		case BulletTime:
 			TickBulletTime( deltaTime );
 			break;
-		case ShootBullet:
-			TickShootBullet();
+		case ShootArrow:
+			TickShootArrow();
 			break;
 	}
 }
@@ -63,8 +63,10 @@ void ABowPlague::OnActivationStart_Implementation()
 void ABowPlague::OnActivationEnd_Implementation()
 {
 	if ( m_skillState != Waiting )
-		m_skillState = ShootBullet;
+		m_skillState = ShootArrow;
 
+
+	// TODO: ending animation probably here, need to check
 	Super::OnActivationEnd_Implementation();
 }
 
@@ -88,13 +90,13 @@ void ABowPlague::TickBulletTime( const float deltaTime )
 {
 	m_bulletTime += deltaTime;
 	if ( m_bulletTime >= m_maxBulletTime )
-		m_skillState = ShootBullet;
+		m_skillState = ShootArrow;
 }
 
-void ABowPlague::TickShootBullet()
+void ABowPlague::TickShootArrow()
 {
 	// TODO: stop bullettime
-	UE_LOG( LogTemp, Warning, TEXT( "TickShootBullet()" ) );
+	UE_LOG( LogTemp, Warning, TEXT( "TickShootArrow()" ) );
 
 	Shoot();
 
