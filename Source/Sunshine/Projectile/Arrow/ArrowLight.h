@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Projectile/Arrow/Arrow.h"
+#include "Skill/Bow/LightZone.h"
 #include "ArrowLight.generated.h"
 
 /**
@@ -16,6 +17,12 @@ class SUNSHINE_API AArrowLight : public AArrow
 
 protected:
 	/**
+	 * \brief Function called when hiting another actor
+	 */
+	void OnHitComponent( UPrimitiveComponent* hitComponent, AActor* otherActor, UPrimitiveComponent* otherComponent,
+	                     FVector normalImpulse, const FHitResult& hit ) override;
+
+	/**
 	 * \brief Function called when overlap with another object begins
 	 */
 	void OnOverlapBegin( UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult ) override;
@@ -23,5 +30,5 @@ protected:
 	/**
 	 * \brief Function called when overlap with another object ends
 	 */
-	void OnOverlapEnd( UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult ) override;	
+	void OnOverlapEnd( UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult ) override;
 };

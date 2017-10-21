@@ -33,7 +33,7 @@ void ASkillBase::OnActivationEnd_Implementation()
 #pragma endregion
 
 #pragma region Getters
-uint32_t ASkillBase::GetManaCost() const
+int ASkillBase::GetManaCost() const
 {
 	return m_manaCost;
 }

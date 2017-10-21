@@ -6,6 +6,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "ShineCharacter.h"
+#include "SunCharacter.h"
 
 #pragma region Unreal Engine functions
 void ABow::BeginPlay()
@@ -42,6 +44,7 @@ void ABow::Bend()
 	if ( m_arrowInstance != nullptr )
 	{
 		UE_LOG( LogTemp, Warning, TEXT( "Arrow has been instantiated !" ) );
+		m_arrowInstance->SetSunshineCharacter( m_owner );
 		m_arrowInstance->AttachItemTo( m_owner->GetMesh(), FName( *m_owner->GetShootSocket() ) );
 	}
 	else

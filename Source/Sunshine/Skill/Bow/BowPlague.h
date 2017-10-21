@@ -38,7 +38,7 @@ protected:
 		Waiting,
 		StartBend,
 		BulletTime,
-		ShootBullet
+		ShootArrow
 	};
 	SkillState	m_skillState = Waiting;
 
@@ -52,5 +52,5 @@ private:
 	void TickWaiting();
 	void TickStartBend();
 	void TickBulletTime( const float deltaTime );
-	void TickShootBullet();
+	void TickShootArrow();
 };

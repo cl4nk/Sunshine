@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Skill/Weapon.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ASunshineCharacter
@@ -101,14 +102,17 @@ void ASunshineCharacter::BeginPlay()
 		m_skillThree->Init( this );
 	}
 	
-	if ( m_defaultSkillFour == nullptr )
+	if ( m_defaultSkillWeapon == nullptr )
 	{
 		UE_LOG( LogTemp, Error, TEXT( "DefaultSkillFour is either null or not valid !" ) );
 	}
 	else
 	{
-		m_skillFour = GWorld->SpawnActor<ASkillBase>(m_defaultSkillFour);
-		m_skillFour->Init( this );
+		m_skillWeapon = GWorld->SpawnActor<ASkillBase>(m_defaultSkillWeapon);
+		m_skillWeapon->Init( this );
+
+		if ( Cast<IWeapon>( m_skillWeapon ) == nullptr )
+			UE_LOG( LogTemp, Error, TEXT( "Skill Four/Weapon is not inheriting from IWeapon" ) );
 	}
 
 }
@@ -179,41 +183,46 @@ void ASunshineCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASunshineCharacter::OnJumpPressed);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ASunshineCharacter::OnJumpReleased);
-	
-	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &ASunshineCharacter::OnCrouchPressed);
-	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &ASunshineCharacter::OnCrouchReleased);
-	
-	PlayerInputComponent->BindAction("Jog", IE_Pressed, this, &ASunshineCharacter::OnJogPressed);
-	PlayerInputComponent->BindAction("Jog", IE_Released, this, &ASunshineCharacter::OnJogReleased);
 
-	PlayerInputComponent->BindAxis("MoveForward", this, &ASunshineCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ASunshineCharacter::MoveRight);
+	PlayerInputComponent->BindAction( "Jump", IE_Pressed, this, &ASunshineCharacter::OnJumpPressed );
+	PlayerInputComponent->BindAction( "Jump", IE_Released, this, &ASunshineCharacter::OnJumpReleased );
+
+	PlayerInputComponent->BindAction( "Crouch", IE_Pressed, this, &ASunshineCharacter::OnCrouchPressed );
+	PlayerInputComponent->BindAction( "Crouch", IE_Released, this, &ASunshineCharacter::OnCrouchReleased );
+
+	PlayerInputComponent->BindAction( "Jog", IE_Pressed, this, &ASunshineCharacter::OnJogPressed );
+	PlayerInputComponent->BindAction( "Jog", IE_Released, this, &ASunshineCharacter::OnJogReleased );
+
+	PlayerInputComponent->BindAxis( "MoveForward", this, &ASunshineCharacter::MoveForward );
+	PlayerInputComponent->BindAxis( "MoveRight", this, &ASunshineCharacter::MoveRight );
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
 	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
-	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("TurnRate", this, &ASunshineCharacter::TurnAtRate);
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis("LookUpRate", this, &ASunshineCharacter::LookUpAtRate);
+	PlayerInputComponent->BindAxis( "Turn", this, &APawn::AddControllerYawInput );
+	PlayerInputComponent->BindAxis( "TurnRate", this, &ASunshineCharacter::TurnAtRate );
+	PlayerInputComponent->BindAxis( "LookUp", this, &APawn::AddControllerPitchInput );
+	PlayerInputComponent->BindAxis( "LookUpRate", this, &ASunshineCharacter::LookUpAtRate );
 
 	// handle touch devices
-	PlayerInputComponent->BindTouch(IE_Pressed, this, &ASunshineCharacter::TouchStarted);
-	PlayerInputComponent->BindTouch(IE_Released, this, &ASunshineCharacter::TouchStopped);
+	PlayerInputComponent->BindTouch( IE_Pressed, this, &ASunshineCharacter::TouchStarted );
+	PlayerInputComponent->BindTouch( IE_Released, this, &ASunshineCharacter::TouchStopped );
 
 	// VR headset functionality
-	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ASunshineCharacter::OnResetVR);
+	PlayerInputComponent->BindAction( "ResetVR", IE_Pressed, this, &ASunshineCharacter::OnResetVR );
 
 	// Skills
-	PlayerInputComponent->BindAction("SkillOne", IE_Pressed, this, &ASunshineCharacter::SkillOnePressed);
-	PlayerInputComponent->BindAction("SkillOne", IE_Released, this, &ASunshineCharacter::SkillOneReleased);
-	PlayerInputComponent->BindAction("SkillTwo", IE_Pressed, this, &ASunshineCharacter::SkillTwoPressed);
-	PlayerInputComponent->BindAction("SkillTwo", IE_Released, this, &ASunshineCharacter::SkillTwoReleased);
-	PlayerInputComponent->BindAction("SkillThree", IE_Pressed, this, &ASunshineCharacter::SkillThreePressed);
-	PlayerInputComponent->BindAction("SkillThree", IE_Released, this, &ASunshineCharacter::SkillThreeReleased);
+	PlayerInputComponent->BindAction( "SkillOne", IE_Pressed, this, &ASunshineCharacter::SkillOnePressed );
+	PlayerInputComponent->BindAction( "SkillOne", IE_Released, this, &ASunshineCharacter::SkillOneReleased );
+	PlayerInputComponent->BindAction( "SkillTwo", IE_Pressed, this, &ASunshineCharacter::SkillTwoPressed );
+	PlayerInputComponent->BindAction( "SkillTwo", IE_Released, this, &ASunshineCharacter::SkillTwoReleased );
+	PlayerInputComponent->BindAction( "SkillThree", IE_Pressed, this, &ASunshineCharacter::SkillThreePressed );
+	PlayerInputComponent->BindAction( "SkillThree", IE_Released, this, &ASunshineCharacter::SkillThreeReleased );
+	PlayerInputComponent->BindAxis( "MultiSkill", this, &ASunshineCharacter::ChangeMultiSkill );
+
+	PlayerInputComponent->BindAction( "AimWeapon", IE_Pressed, this, &ASunshineCharacter::SkillWeaponPressed );
+	PlayerInputComponent->BindAction( "AimWeapon", IE_Released, this, &ASunshineCharacter::SkillWeaponReleased );
+	PlayerInputComponent->BindAction( "ShootWeapon", IE_Pressed, this, &ASunshineCharacter::SkillShoot );
 }
 
 bool ASunshineCharacter::IsHidden() const
@@ -432,26 +441,44 @@ void ASunshineCharacter::SkillThreeReleased()
 	FinishSkill( m_skillThree );
 }
 
-void ASunshineCharacter::SkillFourPressed()
+void ASunshineCharacter::SkillWeaponPressed()
 {
-	if ( m_skillFour == nullptr )
+	if ( m_skillWeapon == nullptr )
 		return;
 
-	StartSkill( m_skillFour, 3 );
+	StartSkill( m_skillWeapon, 3 );
 }
 
-void ASunshineCharacter::SkillFourReleased()
+void ASunshineCharacter::SkillWeaponReleased()
 {
-	if ( m_skillFour == nullptr )
+	if ( m_skillWeapon == nullptr )
 		return;
 
-	FinishSkill( m_skillFour );
+	FinishSkill( m_skillWeapon );
+}
+
+void ASunshineCharacter::SkillShoot()
+{
+	if ( m_bIsUsingSkill && m_skillUsed == 3 )
+	{
+		Cast<IWeapon>( m_skillWeapon )->ShootIfArmed();
+	}
+}
+
+void ASunshineCharacter::ChangeMultiSkill( float rate )
+{
+	// To be overriden
 }
 
 void ASunshineCharacter::StartSkill( ASkillBase* skill, const int index )
 {
 	if ( m_bIsUsingSkill )
 		return;
+
+	const int manaCost = skill->GetManaCost();
+	if ( manaCost > m_currentMana )
+		return;
+	m_currentMana -= manaCost;
 
 	m_bIsUsingSkill = true;
 	m_skillUsed = index;
@@ -478,7 +505,7 @@ ASkillBase*	ASunshineCharacter::GetSkill (const int index) const
 		case 0 : return m_skillOne;
 		case 1 : return m_skillTwo;
 		case 2 : return m_skillThree;
-		case 3 : return m_skillFour;
+		case 3 : return m_skillWeapon;
 		default: return nullptr;
 	}
 }
