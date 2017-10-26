@@ -45,6 +45,13 @@ public:
 	void Start();
 	void Finish();
 
+	/**
+	 * \brief Consumes mana from the parameter
+	 * \param characterMana _IN_ A reference on the character's mana
+	 * \return True if consumed some mana, false otherwise
+	 */
+	virtual bool ConsumeMana( int& characterMana ) const;
+
 protected:
 	/**
 	 * \brief Mana cost of the skill ON CALL

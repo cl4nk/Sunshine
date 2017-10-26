@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "SkillBase.h"
+#include "SunshineCharacter.h"
 
 ASkillBase::ASkillBase()
 {
@@ -62,5 +63,14 @@ void ASkillBase::Finish()
 		return;
 
 	OnActivationEnd();
+}
+
+bool ASkillBase::ConsumeMana( int& characterMana ) const
+{
+	if ( characterMana < m_manaCost )
+		return false;
+
+	characterMana -= m_manaCost;
+	return true;
 }
 #pragma endregion

@@ -38,6 +38,14 @@ void ALightTeleport::Init( ASunshineCharacter* owner )
 	m_skillState = Waiting;
 }
 
+bool ALightTeleport::ConsumeMana( int& characterMana ) const
+{
+	if ( !CanTeleport() )
+		return false;
+
+	return Super::ConsumeMana( characterMana );
+}
+
 void ALightTeleport::CreateNewLightZone( const FVector& worldLocation )
 {
 	FActorSpawnParameters spawnInfo;
