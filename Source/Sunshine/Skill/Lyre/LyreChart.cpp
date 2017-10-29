@@ -4,6 +4,7 @@
 
 // Sets default values for this component's properties
 ULyreChart::ULyreChart()
+	: m_manaCost( 0 )
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -35,6 +36,11 @@ float ULyreChart::GetTimerBeforeNoteAt( const int noteIndex ) const
 	}
 	
 	return m_listNotes[noteIndex].m_timer;
+}
+
+int ULyreChart::GetManaCost() const
+{
+	return m_manaCost;
 }
 
 void ULyreChart::AddNote( const float timer, const ENote note )

@@ -26,6 +26,7 @@ public:
 #pragma endregion
 
 	void Init( ASunshineCharacter* owner ) override;
+	virtual bool ConsumeMana( int& characterMana ) const override;
 
 protected:
 #pragma region Events

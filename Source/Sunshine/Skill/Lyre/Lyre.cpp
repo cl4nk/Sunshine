@@ -58,7 +58,7 @@ void ALyre::Init( ASunshineCharacter* owner )
 	if ( InputComponent )
 	{
 		// register the InputComponent to the world
-		InputComponent->RegisterComponent();
+		//InputComponent->RegisterComponent();
 		// tell this InputComponent if he has an input on some keys, every "underpriorised" InputComponent won't trigger its inputs
 		InputComponent->bBlockInput = bBlockInput;
 
@@ -69,6 +69,19 @@ void ALyre::Init( ASunshineCharacter* owner )
 	}
 	else
 	UE_LOG( LogTemp, Error, TEXT( "InputComponent is nullptr !" ) );
+}
+
+bool ALyre::ConsumeMana( int& characterMana ) const
+{
+	if ( !m_activeChart )
+		return false;
+
+	const int chartManaCost = m_activeChart->GetManaCost();
+	if ( characterMana < chartManaCost )
+		return false;
+
+	characterMana -= chartManaCost;
+	return true;
 }
 
 void ALyre::SelectPrevChart()

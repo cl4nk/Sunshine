@@ -27,6 +27,7 @@ public:
 #pragma endregion
 
 	virtual void Init( ASunshineCharacter* owner ) override;
+	virtual bool ConsumeMana( int& characterMana ) const override;
 
 	UFUNCTION( Category = "Chart", BlueprintCallable )
 	void SelectPrevChart();

@@ -30,7 +30,8 @@ public:
 #pragma endregion
 
 	virtual void Init( ASunshineCharacter* owner ) override;
-	
+	virtual bool ConsumeMana( int& characterMana ) const override;
+
 	void CreateNewLightZone( const FVector& worldLocation );
 
 protected:

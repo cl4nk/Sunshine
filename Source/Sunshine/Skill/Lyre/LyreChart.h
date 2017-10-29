@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Skill/SkillBase.h"
 #include "LyreChart.generated.h"
 
 UENUM(BlueprintType)
@@ -50,6 +51,9 @@ public:
 	UFUNCTION()
 	float GetTimerBeforeNoteAt( const int noteIndex ) const;
 
+	UFUNCTION()
+	int GetManaCost() const;
+
 	// TODO: not possible for GD because UActorComponent does not support BlueprintImplementableEvent
 	//UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	//void InitChart();
@@ -60,4 +64,11 @@ protected:
 
 	UPROPERTY( Category = "Notes", EditDefaultsOnly, BlueprintReadOnly )
 	TArray<FApproachNote> m_listNotes;
+
+	UPROPERTY( Category = "Skill", EditDefaultsOnly, BlueprintReadOnly )
+	int m_manaCost;
+
+	// TODO: implement effect
+	//UPROPERTY( Catgeory = "Skill", EditDefaultsOnly, BlueprintReadOnly )
+	//TSubclassOf<ASkillBase>	m_skillToBeUsed;
 };

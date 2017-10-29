@@ -42,6 +42,14 @@ void ALauriersTree::Init( ASunshineCharacter* owner )
 	m_skillState = Waiting;
 }
 
+bool ALauriersTree::ConsumeMana( int& characterMana ) const
+{
+	if ( m_skillState != Waiting )
+		return false;
+
+	return Super::ConsumeMana( characterMana );
+}
+
 #pragma region Events
 void ALauriersTree::OnActivationStart_Implementation()
 {

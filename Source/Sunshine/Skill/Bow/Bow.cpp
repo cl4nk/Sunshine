@@ -25,8 +25,8 @@ void ABow::Init( ASunshineCharacter* owner )
 {
 	Super::Init( owner );
 
-	m_manaCost = 0;
-	m_noiseValue = 0.0f;
+	//m_manaCost = 0;
+	//m_noiseValue = 0.0f;
 }
 
 void ABow::Bend()

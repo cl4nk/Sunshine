@@ -41,6 +41,14 @@ void AHuntVision::Init( ASunshineCharacter* owner )
 	m_skillState = Waiting;
 }
 
+bool AHuntVision::ConsumeMana( int& characterMana ) const
+{
+	if ( m_skillState != Waiting )
+		return false;
+
+	return Super::ConsumeMana( characterMana );
+}
+
 #pragma region Events
 void AHuntVision::OnActivationStart_Implementation()
 {
@@ -84,7 +92,8 @@ void AHuntVision::TickStartHuntVision()
 void AHuntVision::TickActiveHuntVision( const float deltaTime )
 {
 	m_huntVisionTime += deltaTime;
-	m_skillState = StopHuntVision;
+	if ( m_huntVisionTime >= m_maxHuntvisionTime )
+		m_skillState = StopHuntVision;
 }
 
 void AHuntVision::TickStopHuntVision()

@@ -24,6 +24,7 @@ void AArrow::Tick( float deltaTime )
 
 void AArrow::InitVelocity( FVector direction )
 {
+	m_rootPrimitiveComponent->SetWorldRotation( direction.ToOrientationRotator() + FRotator::MakeFromEuler( FVector( 0.0, 90.0f, 0.0f ) ) );
 	m_rootPrimitiveComponent->AddImpulse( direction * m_powerVelocity );
 }
 
