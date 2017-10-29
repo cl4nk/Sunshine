@@ -53,6 +53,9 @@ public:
 	virtual bool ConsumeMana( int& characterMana ) const;
 
 protected:
+
+	void MakeNoise(const float &value, const FVector &location);
+
 	/**
 	 * \brief Mana cost of the skill ON CALL
 	 */
