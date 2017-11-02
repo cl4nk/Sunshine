@@ -76,6 +76,6 @@ bool ASkillBase::ConsumeMana( int& characterMana ) const
 void ASkillBase::MakeNoise(const float & value, const FVector & location)
 {
 	if (m_owner)
-		AActor::MakeNoise(value, m_owner, location, 0, NAME_None);
+		m_owner->EmitNoise(value);
 }
 #pragma endregion

@@ -8,6 +8,8 @@
 #include "SunshineCharacter.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE( FOnAction );
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNoiseEvent, float, noise);
+
 
 UENUM(BlueprintType)
 enum class ESunshineCharacterControllerMode : uint8
@@ -265,7 +267,7 @@ protected:
 	 * \brief Noise produced by the Character when walking
 	 */
 	UPROPERTY(Category = "Stats|Walk", EditAnywhere, BlueprintReadOnly)
-	float m_walkNoise = 1.f;
+	float m_walkNoise = 0.3f;
 #pragma endregion
 
 #pragma region Run
@@ -279,7 +281,7 @@ protected:
 	 * \brief Noise produced by the Character when running
 	 */
 	UPROPERTY(Category = "Stats|Run", EditAnywhere, BlueprintReadOnly)
-	float m_runNoise = 2.f;
+	float m_runNoise = 0.6f;
 #pragma endregion
 
 #pragma region Crouch
@@ -307,14 +309,14 @@ protected:
 	 * \brief Noise produced by the Character when climbing
 	 */
 	UPROPERTY(Category = "Stats|Climb", EditAnywhere, BlueprintReadOnly)
-	float m_climbNoise = 0.5f;
+	float m_climbNoise = 0.16f;
 #pragma endregion
 
 	/**
 	 * \brief Noise produced by the Character when jumping
 	 */
 	UPROPERTY(Category = "Stats|Jump", EditAnywhere, BlueprintReadOnly)
-	float m_jumpNoise = 2.f;
+	float m_jumpNoise = 0.6f;
 
 	// TODO: projectile to be set
 	// UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
@@ -471,4 +473,7 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 	/** Returns NoiseEmitter subobject **/
 	FORCEINLINE class UPawnNoiseEmitterComponent* GetNoiseEmitter() const { return NoiseEmitter; }
+
+	UPROPERTY(BlueprintAssignable)
+	FNoiseEvent OnNoiseEmitted;
 };

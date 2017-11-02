@@ -1,7 +1,7 @@
 // Copyright 1998-2017 Epic Games, Inc. All Rights Reserved.
 
 #include "SunshineCharacter.h"
-#include "Kismet/HeadMountedDisplayFunctionLibrary.h"
+#include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -242,31 +242,32 @@ void ASunshineCharacter::EndHiding()
 
 void ASunshineCharacter::EmitWalkNoise()
 {
-	NoiseEmitter->MakeNoise(this, m_walkNoise, GetActorLocation());
+	EmitNoise(m_walkNoise);
 }
 
 void ASunshineCharacter::EmitRunNoise()
 {
-	NoiseEmitter->MakeNoise(this, m_runNoise, GetActorLocation());
+	EmitNoise(m_runNoise);
 }
 
 void ASunshineCharacter::EmitJumpStartNoise()
 {
-	NoiseEmitter->MakeNoise(this, m_jumpNoise, GetActorLocation());
+	EmitNoise(m_jumpNoise);
 }
 
 void ASunshineCharacter::EmitJumpEndNoise()
 {
-	NoiseEmitter->MakeNoise(this, m_jumpNoise, GetActorLocation());
+	EmitNoise(m_jumpNoise);
 }
 
 void ASunshineCharacter::EmitCrouchNoise()
 {
-	NoiseEmitter->MakeNoise(this, m_crouchNoise, GetActorLocation());
+	EmitNoise(m_crouchNoise);
 }
 
 void ASunshineCharacter::EmitNoise(const float &Loudness)
 {
+	OnNoiseEmitted.Broadcast(Loudness);
 	NoiseEmitter->MakeNoise(this, Loudness, GetActorLocation());
 }
 
